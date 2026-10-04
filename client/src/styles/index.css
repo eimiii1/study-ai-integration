@@ -28,7 +28,7 @@
   .card-flip { transition: none; }
 }
 
-input:focus-visible, button:focus-visible, a:focus-visible {
+button:focus-visible, a:focus-visible {
   outline: 2px solid var(--color-gilt);
   outline-offset: 2px;
 }
