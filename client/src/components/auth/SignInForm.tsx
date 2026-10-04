@@ -37,7 +37,7 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
             <h2 className="font-serif text-2xl mb-1">
                 Welcome Back
             </h2>
-            <p className="text-[#172220]/60 mb-10">
+            <p className="text-bone/60 mb-10">
                 Sign In to get back to your decks.
             </p>
 
@@ -46,7 +46,7 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
                 className="flex flex-col gap-6"
             >
                 <label className="flex flex-col gap-2">
-                    <span className="text-sm text-[#172220]/70">
+                    <span className="text-sm text-bone/70">
                         Username
                     </span>
 
@@ -55,11 +55,11 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
                         type="text"
                         autoComplete="username"
                         required
-                        className="bg-transparent border-0 border-b border-[#172220]/15 pb-2.5 text-base outline-none transition focus:border-[#23B32]"
+                        className="bg-transparent border-0 border-b border-bone/15 pb-2.5 text-base outline-none transition focus:border-gilt/15"
                     />
                 </label>
                 <label className="flex flex-col gap-2">
-                    <span className="text-sm text-[#172220]/70">
+                    <span className="text-sm text-bone/70">
                         Password
                     </span>
 
@@ -70,12 +70,12 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
                         required
                         className="
               bg-transparent
-              border-0 border-b border-[#172220]/15
+              border-0 border-b border-bone/15
               pb-2.5
               text-base
               outline-none
               transition
-              focus:border-[#C23B32]
+              focus:border-gilt/15
             "
                     />
                 </label>
@@ -84,24 +84,24 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
                     type="submit"
                     className="
             mt-2
-            bg-[#172220] text-[#F7F5EF]
+            bg-bone text-obsidian
             text-sm font-medium
             px-5 py-3.5
             rounded-sm
             transition-all duration-200
-            hover:bg-[#C23B32]
+            hover:bg-gilt
             hover:-translate-y-0.5
           "
                 >
                     Log in
                 </button>
             </form>
-            <p className="mt-8 text-sm text-[#172220]/60">
+            <p className="mt-8 text-sm text-bone/60">
                 No account? {" "}
                 <button
                     type="button"
                     onClick={onRegister}
-                    className="text-[#C23B32] hover:underline"
+                    className="text-gilt hover:underline"
                 >
                     Create one
                 </button>

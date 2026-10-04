@@ -1,5 +1,6 @@
 import { useState } from "react"
 import SignInForm from "../../components/auth/SignInForm"
+import RegisterForm from "../../components/auth/RegisterForm"
 
 type View = 'sign-in' | 'register'
 
@@ -69,7 +70,7 @@ const Page = () => {
                     {view == 'sign-in' ? (
                         <SignInForm onRegister={() => setView('register')} />
                     ) : (
-                        <div>bakla</div>
+                        <RegisterForm onLogin={() => setView('sign-in')} />
                     )}
                 </div>
             </section>
