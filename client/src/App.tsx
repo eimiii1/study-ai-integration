@@ -1,6 +1,7 @@
 import {Navigate, Route, Routes, Outlet } from 'react-router'
 import Index from './pages'
-import Auth from './pages/auth/Auth'
+import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
 
 const App = () => {
   const Protected = () => {
@@ -15,7 +16,8 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path='/auth' element={<Auth />} />
+      <Route path='/login' element={<LoginPage />} />
+      <Route path='/register' element={<RegisterPage />} />
       
       <Route element={<Protected />}>
         <Route path='/' element={<Index />} />
