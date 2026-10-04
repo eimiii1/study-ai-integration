@@ -1,10 +1,23 @@
 import { Link } from "react-router";
 import AuthLayout from "../../layout/AuthLayout";
 import AuthField from "../../components/auth/AuthField";
+import { api } from "../../api/client";
 
 export default function LoginPage() {
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
+
+        const formData = new FormData(event.currentTarget)
+    
+        const username = formData.get('username')
+        const password = formData.get('password')
+
+        const data = await api('/login', {
+          method: 'POST',
+          body: JSON.stringify({username, password})
+        })
+    
+        window.location.href = '/'
     }
   return (
     <AuthLayout>

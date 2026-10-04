@@ -1,8 +1,26 @@
 import { Link } from "react-router";
 import AuthLayout from "../../layout/AuthLayout";
 import AuthField from "../../components/auth/AuthField";
+import { api } from "../../api/client";
 
 export default function RegisterPage() {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget)
+
+    const username = formData.get('username')
+    const email = formData.get('email')
+    const password = formData.get('password')
+
+    const data = await api("/register", {
+      method: "POST",
+      body: JSON.stringify({ username, email, password })
+    })
+
+    window.location.href = '/login'
+  }
+
   return (
     <AuthLayout>
       <h2 className="font-serif text-2xl mb-1">Create your account</h2>
@@ -10,10 +28,7 @@ export default function RegisterPage() {
 
       <form
         className="flex flex-col gap-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          // TODO: wire up register API
-        }}
+        onSubmit={handleSubmit}
       >
         <AuthField label="Username" name="username" />
         <AuthField label="Email address" name="email" type="email" />
