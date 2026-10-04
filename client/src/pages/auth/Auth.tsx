@@ -4,7 +4,7 @@ import RegisterForm from "../../components/auth/RegisterForm"
 
 type View = 'sign-in' | 'register'
 
-const Page = () => {
+const Auth = () => {
     const [isFlipped, setIsFlipped] = useState<boolean>(false)
     const [view, setView] = useState<View>('sign-in')
 
@@ -13,7 +13,7 @@ const Page = () => {
             <section className="bg-inkwell text-obsidian flex flex-col justify-center px-8 md:px-16 py-16 gap-10">
                 <div className="max-w-md">
                     <h1 className="font-serif text-3xl md:text-[2.75rem] leading-[1.15] mb-4">
-                        Study your own decks, notes and quizzed back to you by AI.
+                        Study your own notes and quizzed back to you by AI.
                     </h1>
 
                     <p className="text-obsidian/70 leading-relaxed mx-w-sm">
@@ -25,7 +25,7 @@ const Page = () => {
                     type="button"
                     aria-label="Click to flip the flashcard"
                     onClick={() => setIsFlipped(prev => !prev)}
-                    className="w-full max-w-sm aspect-4/3 text-left cursor-pointer perspective-[1400px]"
+                    className="w-full max-w-sm aspect-4/3 text-left perspective-[1400px]"
                 >
                     <div
                         className={[
@@ -78,4 +78,4 @@ const Page = () => {
     )
 }
 
-export default Page
+export default Auth

@@ -1,7 +1,6 @@
 import {Navigate, Route, Routes, Outlet } from 'react-router'
-import Auth from './pages/Auth'
-import MainPage from './pages/MainPage'
-import Page from './pages/auth/Auth'
+import Index from './pages'
+import Auth from './pages/auth/Auth'
 
 const App = () => {
   const Protected = () => {
@@ -17,10 +16,9 @@ const App = () => {
   return (
     <Routes>
       <Route path='/auth' element={<Auth />} />
-      <Route path='/sign-in' element={<Page />} />
       
       <Route element={<Protected />}>
-        <Route path='/' element={<MainPage />} />
+        <Route path='/' element={<Index />} />
       </Route>
     </Routes>
   )

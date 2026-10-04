@@ -30,7 +30,7 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
         
         window.location.href = '/'
         const data = await response.json()
-        localStorage.setItem('token', data.token)
+        localStorage.setItem('token', data.access_token)
     }
     return (
         <div className="flex flex-col">
@@ -93,7 +93,7 @@ const SignInForm = ({ onRegister }: LoginFormProps) => {
             hover:-translate-y-0.5
           "
                 >
-                    Log in
+                    Sign In
                 </button>
             </form>
             <p className="mt-8 text-sm text-bone/60">
