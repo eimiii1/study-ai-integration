@@ -16,6 +16,8 @@ export default function LoginPage() {
           method: 'POST',
           body: JSON.stringify({username, password})
         })
+
+        localStorage.setItem('token', data.access_token)
     
         window.location.href = '/'
     }
