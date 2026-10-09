@@ -1,5 +1,5 @@
 import {Navigate, Route, Routes, Outlet } from 'react-router'
-import Index from './pages'
+import Index from './pages/index.tsx'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 
@@ -8,7 +8,7 @@ const App = () => {
     const token = localStorage.getItem('token')
 
     if (!token) {
-      return <Navigate to='/auth' replace />
+      return <Navigate to='/login' replace />
     }
 
     return <Outlet />

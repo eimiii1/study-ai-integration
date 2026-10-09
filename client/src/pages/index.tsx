@@ -1,14 +1,9 @@
-import AppLayout from "../layout/AppLayout";
-import AIPromptBox from "../components/AIPromptBox";
-import DeckPreviewGrid from "../components/DeckPreviewGrid";
-
-export default function MainPage() {
+const Index = () => {
   return (
-    <AppLayout>
-      <div className="flex flex-col gap-16">
-        <AIPromptBox />
-        <DeckPreviewGrid />
-      </div>
-    </AppLayout>
-  );
+    <>
+      asd
+    </>
+  )
 }
+
+export default Index
