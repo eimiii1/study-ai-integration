@@ -1,11 +1,24 @@
 import { Link } from "react-router";
 import AuthField from "../../components/auth/AuthField";
 import AuthLayout from "../../layout/AuthLayout";
+import { api } from "../../api/client";
 
 export default function RegisterPage() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: wire up register API
+
+    const formData = new FormData(event.currentTarget)
+    
+    const username = formData.get('username')
+    const email = formData.get('email')
+    const password = formData.get('password')
+
+    const response = await api('/register', {
+      method: 'POST',
+      body: JSON.stringify({ username, email, password })
+    })
+
+    window.location.href = '/login'
   };
 
   return (
