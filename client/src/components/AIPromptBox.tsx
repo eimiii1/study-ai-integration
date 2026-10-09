@@ -27,22 +27,25 @@ const icons = {
 
 export default function AIPromptBox() {
   return (
-    <section className="flex flex-col items-center gap-6 py-10 text-center">
-      <h1 className="text-2xl font-semibold tracking-tight">What shall we study?</h1>
+    <section className="flex flex-col items-center gap-8 pt-6 text-center">
+      <div className="flex flex-col gap-1.5">
+        <h1 className="text-[1.75rem] font-semibold tracking-tight">What shall we study?</h1>
+        <p className="text-sm text-muted">Describe a topic and I'll build a deck for it.</p>
+      </div>
 
-      <div className="w-full max-w-xl rounded-2xl border border-line bg-paper p-4">
+      <div className="w-full max-w-xl rounded-2xl border border-line bg-canvas/40 p-4 transition focus-within:border-ink/30">
         <textarea
           rows={2}
           placeholder="I want to study..."
           className="w-full resize-none bg-transparent text-sm outline-none placeholder:text-muted"
         />
-        <div className="mt-2 flex items-center justify-between">
+        <div className="mt-3 flex items-center justify-between">
           <div className="flex gap-2">
             {actions.map((a) => (
               <button
                 key={a.label}
                 type="button"
-                className="flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs font-medium text-muted transition hover:border-ink hover:text-ink"
+                className="flex items-center gap-1.5 rounded-full border border-line bg-paper px-3 py-1.5 text-xs font-medium text-muted transition hover:border-ink hover:text-ink"
               >
                 {icons[a.icon as keyof typeof icons]}
                 {a.label}

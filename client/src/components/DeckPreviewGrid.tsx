@@ -38,7 +38,7 @@ export default function DeckPreviewGrid() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {decks.map((deck) => (
-          <DeckPreviewCard key={deck.id} title={deck.title} />
+          <DeckPreviewCard key={deck.id} title={deck.title} description={deck.description} />
         ))}
       </div>
     </section>

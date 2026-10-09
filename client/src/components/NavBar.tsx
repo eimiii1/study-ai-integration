@@ -48,7 +48,7 @@ export default function NavBar() {
   const location = useLocation();
 
   return (
-    <aside className="flex h-full w-60 shrink-0 flex-col rounded-2xl border border-line bg-paper">
+    <aside className="flex h-full w-60 shrink-0 flex-col rounded-2xl border border-line bg-paper shadow-[0_1px_2px_rgba(10,10,10,0.03),0_12px_32px_-12px_rgba(10,10,10,0.08)]shadow-[0_1px_2px_rgba(10,10,10,0.03),0_12px_32px_-12px_rgba(10,10,10,0.08)]">
       <div className="flex items-center gap-3 px-5 py-6">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-dashed border-line text-[10px] font-medium text-muted">
           logo

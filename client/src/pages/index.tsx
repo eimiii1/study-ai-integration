@@ -5,9 +5,9 @@ import DeckPreviewGrid from "../components/DeckPreviewGrid";
 export default function MainPage() {
   return (
     <AppLayout>
-      <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted">Home</h2>
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-14">
         <AIPromptBox />
+        <div className="h-px bg-line" />
         <DeckPreviewGrid />
       </div>
     </AppLayout>
