@@ -7,8 +7,12 @@
   --color-chalk: #F7F5EF;
   --color-gilt: #C23B32;
 
-  --font-serif: "Lora", serif;
-  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Geist", -apple-system, sans-serif;
+}
+
+body {
+  background: #F7F5EF;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Flashcard flip */
