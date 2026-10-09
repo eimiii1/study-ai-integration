@@ -1,14 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-inkwell: #1F3A34;
-  --color-obsidian: #F7F5EF;
-  --color-bone: #172220;
-  --color-chalk: #F7F5EF;
-  --color-gilt: #C23B32;
+  --color-ink: #0A0A0A;
+  --color-paper: #FFFFFF;
+  --color-canvas: #F4F4F4;
+  --color-line: #E5E5E5;
+  --color-muted: #8A8A8A;
 
   --font-serif: "Geist", -apple-system, sans-serif;
   --font-sans: "Geist", -apple-system, sans-serif;
+}
+
+body {
+  background: #F4F4F4;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {

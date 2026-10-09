@@ -7,12 +7,12 @@ type AuthFieldProps = {
 export default function AuthField({ label, name, type = "text" }: AuthFieldProps) {
   return (
     <label className="flex flex-col gap-2">
-      <span className="text-sm text-bone/70">{label}</span>
+      <span className="text-sm font-medium text-muted">{label}</span>
       <input
         name={name}
         type={type}
         required
-        className="bg-transparent border-0 border-b border-bone/15 pb-2.5 text-base outline-none transition focus:border-gilt"
+        className="rounded-lg border border-line bg-paper px-3.5 py-2.5 text-sm outline-none transition focus:border-ink"
       />
     </label>
   );
