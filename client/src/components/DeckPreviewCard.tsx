@@ -1,9 +1,11 @@
 type DeckPreviewCardProps = {
   title: string;
   description: string | null;
+  subdeckCount: number;
+  cardCount: number;
 };
 
-export default function DeckPreviewCard({ title, description }: DeckPreviewCardProps) {
+export default function DeckPreviewCard({ title, description, subdeckCount, cardCount }: DeckPreviewCardProps) {
   return (
     <article className="group flex flex-col justify-between gap-4 rounded-2xl border border-line bg-paper p-5 transition hover:border-ink">
       <div className="flex flex-col gap-2">
@@ -14,7 +16,10 @@ export default function DeckPreviewCard({ title, description }: DeckPreviewCardP
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wide text-muted">Deck</span>
+        <div className="flex gap-3 text-xs font-medium text-muted">
+          <span>{subdeckCount} subdecks</span>
+          <span>{cardCount} cards</span>
+        </div>
         <span className="text-sm font-medium text-ink opacity-0 transition group-hover:opacity-100">
           Open →
         </span>

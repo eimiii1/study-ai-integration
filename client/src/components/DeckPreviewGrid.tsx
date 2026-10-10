@@ -7,6 +7,9 @@ type Deck = {
   id: number;
   title: string;
   description: string | null;
+  parent_deck_id: number | null;
+  subdeck_count: number;
+  card_count: number;
 };
 
 export default function DeckPreviewGrid() {
@@ -16,7 +19,10 @@ export default function DeckPreviewGrid() {
 
   useEffect(() => {
     api<Deck[]>("/decks")
-      .then((data) => setDecks(data))
+      .then((data) => {
+        const topLevelDecks = data.filter((deck) => deck.parent_deck_id === null);
+        setDecks(topLevelDecks);
+      })
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load decks"))
       .finally(() => setLoading(false));
   }, []);
@@ -38,7 +44,13 @@ export default function DeckPreviewGrid() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {decks.map((deck) => (
-          <DeckPreviewCard key={deck.id} title={deck.title} description={deck.description} />
+          <DeckPreviewCard
+            key={deck.id}
+            title={deck.title}
+            description={deck.description}
+            subdeckCount={deck.subdeck_count}
+            cardCount={deck.card_count}
+          />
         ))}
       </div>
     </section>
