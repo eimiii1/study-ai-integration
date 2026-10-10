@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import AppLayout from "../layout/AppLayout";
 import DeckPreviewCard from "../components/DeckPreviewCard";
+import CreateDeckModal from "../components/CreateDeckModal";
 
 type Deck = {
   id: number;
@@ -16,6 +17,7 @@ export default function DecksPage() {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     api<Deck[]>("/decks")
@@ -37,6 +39,7 @@ export default function DecksPage() {
           </div>
           <button
             type="button"
+            onClick={() => setModalOpen(true)}
             className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-ink/85"
           >
             + Create deck
@@ -61,6 +64,8 @@ export default function DecksPage() {
           ))}
         </div>
       </div>
+
+      <CreateDeckModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </AppLayout>
   );
 }
