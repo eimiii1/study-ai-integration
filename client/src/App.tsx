@@ -2,6 +2,7 @@ import {Navigate, Route, Routes, Outlet } from 'react-router'
 import Index from './pages/index.tsx'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
+import DecksPage from './pages/DecksPage.tsx'
 
 const App = () => {
   const Protected = () => {
@@ -21,6 +22,7 @@ const App = () => {
       
       <Route element={<Protected />}>
         <Route path='/' element={<Index />} />
+        <Route path='/decks' element={<DecksPage />} />
       </Route>
     </Routes>
   )
