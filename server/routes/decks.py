@@ -52,10 +52,13 @@ def get_decks():
         {
             'id' : deck.id,
             'title' : deck.title,
-            'description' : deck.description
+            'description' : deck.description,
+            'parent_deck_id' : deck.parent_deck_id,
+            'subdeck_count' : len(deck.subdecks),
+            'card_count' : len(deck.flashcards)
         }
         for deck in decks
-    ]), 201
+    ]), 200
 
 @decks_bp.route('/<int:deck_id>', methods=['PUT'])
 @jwt_required()
