@@ -19,7 +19,8 @@ export default function DecksPage() {
   const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
+  const fetchDecks = () => {
+    setLoading(true);
     api<Deck[]>("/decks")
       .then((data) => {
         const topLevelDecks = data.filter((deck) => deck.parent_deck_id === null);
@@ -27,6 +28,10 @@ export default function DecksPage() {
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load decks"))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchDecks();
   }, []);
 
   return (
@@ -65,7 +70,11 @@ export default function DecksPage() {
         </div>
       </div>
 
-      <CreateDeckModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <CreateDeckModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onCreated={fetchDecks}
+      />
     </AppLayout>
   );
 }

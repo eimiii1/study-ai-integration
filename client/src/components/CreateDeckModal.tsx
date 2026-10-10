@@ -1,9 +1,12 @@
+import { api } from "../api/client";
+
 type CreateDeckModalProps = {
   open: boolean;
   onClose: () => void;
+  onCreated: () => void;
 };
 
-export default function CreateDeckModal({ open, onClose }: CreateDeckModalProps) {
+export default function CreateDeckModal({ open, onClose, onCreated }: CreateDeckModalProps) {
   if (!open) return null;
 
   return (
@@ -23,9 +26,23 @@ export default function CreateDeckModal({ open, onClose }: CreateDeckModalProps)
 
         <form
           className="mt-6 flex flex-col gap-4"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            // TODO: wire up create deck API
+
+            const formData = new FormData(e.currentTarget);
+            const title = formData.get("title");
+            const description = formData.get("description");
+
+            try {
+              await api("/decks", {
+                method: "POST",
+                body: JSON.stringify({ title, description }),
+              });
+              onClose();
+              onCreated();
+            } catch (err) {
+              alert(err instanceof Error ? err.message : "Failed to create deck");
+            }
           }}
         >
           <label className="flex flex-col gap-2">
