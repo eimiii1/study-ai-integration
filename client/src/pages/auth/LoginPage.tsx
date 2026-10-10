@@ -17,6 +17,8 @@ export default function LoginPage() {
       body: JSON.stringify({ username, password })
     })
 
+    localStorage.setItem('token', response.access_token)
+
     window.location.href = '/'
   };
 
