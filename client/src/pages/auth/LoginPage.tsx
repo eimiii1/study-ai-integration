@@ -1,49 +1,128 @@
-import { Link } from "react-router";
-import AuthField from "../../components/auth/AuthField";
-import AuthLayout from "../../layout/AuthLayout";
-import { api } from "../../api/client";
+import { useState, type FormEvent } from "react";
+import {
+  ArrowRightIcon,
+  EyeIcon,
+  EyeOffIcon,
+  LockIcon,
+  MailIcon,
+} from "../../components/icons";
+import { AuthLayout } from "./AuthLayout";
 
-export default function LoginPage() {
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+export interface LoginFormValues {
+  email: string;
+  password: string;
+  remember: boolean;
+}
 
-    const formData = new FormData(event.currentTarget)
+interface LoginPageProps {
+  onSubmit?: (values: LoginFormValues) => void;
+  onGoToRegister?: () => void;
+}
 
-    const username = formData.get('username')
-    const password = formData.get('password')
+export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const response = await api('/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password })
-    })
-
-    localStorage.setItem('token', response.access_token)
-
-    window.location.href = '/'
-  };
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    onSubmit?.({ email, password, remember });
+  }
 
   return (
-    <AuthLayout>
-      <h2 className="text-2xl font-semibold tracking-tight">Welcome back</h2>
-      <p className="mt-1 text-muted">Log in to get back to your decks.</p>
+    <AuthLayout
+      headline="Every deck you're studying, in one place."
+      eyebrow="Rune turns your notes into flashcards and quizzes — sign in to pick up where you left off."
+    >
+      <h1 className="m-0 mb-1.5 text-[22px] font-medium text-ink">Welcome back</h1>
+      <p className="m-0 mb-7 text-[13px] text-ink-muted">Sign in to continue to Deckly.</p>
 
-      <form className="mt-8 flex flex-col gap-5" onSubmit={handleSubmit}>
-        <AuthField label="Username" name="username" />
-        <AuthField label="Password" name="password" type="password" />
+      <form onSubmit={handleSubmit}>
+        <div className="mb-5 flex flex-col gap-4">
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[12.5px] font-medium text-ink-dim">Email</span>
+            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+              <MailIcon size={15} className="text-ink-faint" />
+              <input
+                type="email"
+                placeholder="you@school.edu"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+                className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
+              />
+            </span>
+          </label>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[12.5px] font-medium text-ink-dim">Password</span>
+            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+              <LockIcon size={15} className="text-ink-faint" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
+              />
+              <button
+                type="button"
+                className="flex flex-shrink-0 p-0.5 text-ink-faint hover:text-ink-dim"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOffIcon size={15} /> : <EyeIcon size={15} />}
+              </button>
+            </span>
+          </label>
+        </div>
+
+        <div className="-mt-1.5 mb-5 flex items-center justify-between">
+          <label className="flex items-center gap-1.75 text-[12.5px] text-ink-dim">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="h-3.5 w-3.5 accent-violet"
+            />
+            <span>Remember me</span>
+          </label>
+          <button type="button" className="text-[12.5px] text-ink-dim hover:text-ink">
+            Forgot password?
+          </button>
+        </div>
 
         <button
           type="submit"
-          className="mt-2 rounded-lg bg-ink px-5 py-3 text-sm font-medium text-paper transition hover:bg-ink/85"
+          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-violet text-[13.5px] font-semibold text-app hover:bg-violet-strong"
         >
-          Log in
+          <span>Sign in</span>
+          <ArrowRightIcon size={14} />
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-muted">
-        No account?{" "}
-        <Link to="/register" className="font-medium text-ink hover:underline">
+      <div className="mb-5 flex items-center gap-2.5 before:h-px before:flex-1 before:bg-hairline after:h-px after:flex-1 after:bg-hairline">
+        <span className="text-[11.5px] text-ink-faint">or continue with</span>
+      </div>
+
+      <div className="mb-7 flex gap-2.5">
+        <button className="flex h-9.5 flex-1 items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-dim hover:bg-panel-hover hover:text-ink">
+          Google
+        </button>
+        <button className="flex h-9.5 flex-1 items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-dim hover:bg-panel-hover hover:text-ink">
+          Microsoft
+        </button>
+      </div>
+
+      <p className="m-0 text-center text-[12.5px] text-ink-muted">
+        Don't have an account?{" "}
+        <button type="button" onClick={onGoToRegister} className="font-medium text-ink">
           Create one
-        </Link>
+        </button>
       </p>
     </AuthLayout>
   );

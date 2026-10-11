@@ -1,49 +1,146 @@
-import { Link } from "react-router";
-import AuthField from "../../components/auth/AuthField";
-import AuthLayout from "../../layout/AuthLayout";
-import { api } from "../../api/client";
+import { useState, type FormEvent } from "react";
+import {
+  ArrowRightIcon,
+  EyeIcon,
+  EyeOffIcon,
+  LockIcon,
+  MailIcon,
+  UserIcon,
+} from "../../components/icons";
+import { AuthLayout } from "./AuthLayout";
 
-export default function RegisterPage() {
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+export interface RegisterFormValues {
+  name: string;
+  email: string;
+  password: string;
+  agreeToTerms: boolean;
+}
 
-    const formData = new FormData(event.currentTarget)
-    
-    const username = formData.get('username')
-    const email = formData.get('email')
-    const password = formData.get('password')
+interface RegisterPageProps {
+  onSubmit?: (values: RegisterFormValues) => void;
+  onGoToLogin?: () => void;
+}
 
-    const response = await api('/register', {
-      method: 'POST',
-      body: JSON.stringify({ username, email, password })
-    })
+export function RegisterPage({ onSubmit, onGoToLogin }: RegisterPageProps) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    window.location.href = '/login'
-  };
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    onSubmit?.({ name, email, password, agreeToTerms });
+  }
 
   return (
-    <AuthLayout>
-      <h2 className="text-2xl font-semibold tracking-tight">Create your account</h2>
-      <p className="mt-1 text-muted">Start building your first deck.</p>
+    <AuthLayout
+      headline="Turn your notes into decks Rune can quiz you on."
+      eyebrow="Create an account to start building flashcard decks and auto-generated quizzes."
+    >
+      <h1 className="m-0 mb-1.5 text-[22px] font-medium text-ink">Create your account</h1>
+      <p className="m-0 mb-7 text-[13px] text-ink-muted">Get started with Deckly for free.</p>
 
-      <form className="mt-8 flex flex-col gap-5" onSubmit={handleSubmit}>
-        <AuthField label="Username" name="username" />
-        <AuthField label="Email address" name="email" type="email" />
-        <AuthField label="Password" name="password" type="password" />
+      <form onSubmit={handleSubmit}>
+        <div className="mb-5 flex flex-col gap-4">
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[12.5px] font-medium text-ink-dim">Full name</span>
+            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+              <UserIcon size={15} className="text-ink-faint" />
+              <input
+                type="text"
+                placeholder="Jane Moore"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                autoComplete="name"
+                required
+                className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
+              />
+            </span>
+          </label>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[12.5px] font-medium text-ink-dim">Email</span>
+            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+              <MailIcon size={15} className="text-ink-faint" />
+              <input
+                type="email"
+                placeholder="you@school.edu"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
+                className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
+              />
+            </span>
+          </label>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="text-[12.5px] font-medium text-ink-dim">Password</span>
+            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+              <LockIcon size={15} className="text-ink-faint" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="At least 8 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="new-password"
+                minLength={8}
+                required
+                className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
+              />
+              <button
+                type="button"
+                className="flex flex-shrink-0 p-0.5 text-ink-faint hover:text-ink-dim"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOffIcon size={15} /> : <EyeIcon size={15} />}
+              </button>
+            </span>
+          </label>
+        </div>
+
+        <div className="mb-5 flex items-center justify-between">
+          <label className="flex items-center gap-1.75 text-[12.5px] text-ink-dim">
+            <input
+              type="checkbox"
+              checked={agreeToTerms}
+              onChange={(e) => setAgreeToTerms(e.target.checked)}
+              required
+              className="h-3.5 w-3.5 accent-violet"
+            />
+            <span>I agree to the Terms and Privacy Policy</span>
+          </label>
+        </div>
 
         <button
           type="submit"
-          className="mt-2 rounded-lg bg-ink px-5 py-3 text-sm font-medium text-paper transition hover:bg-ink/85"
+          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-violet text-[13.5px] font-semibold text-app hover:bg-violet-strong"
         >
-          Create account
+          <span>Create account</span>
+          <ArrowRightIcon size={14} />
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-muted">
+      <div className="mb-5 flex items-center gap-2.5 before:h-px before:flex-1 before:bg-hairline after:h-px after:flex-1 after:bg-hairline">
+        <span className="text-[11.5px] text-ink-faint">or continue with</span>
+      </div>
+
+      <div className="mb-7 flex gap-2.5">
+        <button className="flex h-9.5 flex-1 items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-dim hover:bg-panel-hover hover:text-ink">
+          Google
+        </button>
+        <button className="flex h-9.5 flex-1 items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-dim hover:bg-panel-hover hover:text-ink">
+          Microsoft
+        </button>
+      </div>
+
+      <p className="m-0 text-center text-[12.5px] text-ink-muted">
         Already have an account?{" "}
-        <Link to="/login" className="font-medium text-ink hover:underline">
-          Log in
-        </Link>
+        <button type="button" onClick={onGoToLogin} className="font-medium text-ink">
+          Sign in
+        </button>
       </p>
     </AuthLayout>
   );
