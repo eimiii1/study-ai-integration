@@ -30,3 +30,9 @@ export interface ExploreDeck {
   description: string;
   trending?: boolean;
 }
+
+export interface User {
+  id: number,
+  username?: string,
+  email: string
+}

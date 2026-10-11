@@ -1,12 +1,54 @@
 import { quickActions } from "../data";
 import { AtIcon, BellIcon, ChevronDownIcon, IconIndex, PlusIcon, SkillsIcon } from "./icons";
+import type { User } from "../types";
+import { useState, useEffect } from "react";
 
 export function Hero() {
+  const [user, setUser] = useState<User | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const TOKEN = localStorage.getItem('token')
+        const response = await fetch('http://192.168.100.7:5001/api/me', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${TOKEN}`
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error(`Server responded with status: ${response.status}`)
+        }
+
+        const data = await response.json()
+        const id = data.id
+        const username = data.username
+        const email = data.email
+
+        setUser({ id, username, email })
+
+      } catch (error: any) {
+        setMessage(error.message)
+        console.log(error.message)
+      }
+    }
+
+    fetchUser()
+  }, [])
+
   return (
     <section className="flex flex-col items-center px-5 pb-9 pt-16">
+      {!user ? (
+        <h1 className="m-0 text-[23px] font-medium tracking-tight text-ink">
+          Good morning
+        </h1>
+      ) : (
       <h1 className="m-0 text-[23px] font-medium tracking-tight text-ink">
-        Good morning, Jane
+        Good morning, {user.username}
       </h1>
+      )}
       <p className="mb-6 mt-1.5 text-[13px] text-ink-muted">
         I'm Rune, what are we studying today?
       </p>

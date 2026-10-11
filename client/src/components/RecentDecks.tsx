@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { recentDecks } from "../data";
 import { AvatarCluster } from "./AvatarCluster";
 import { ExpandIcon, RefreshIcon } from "./icons";
