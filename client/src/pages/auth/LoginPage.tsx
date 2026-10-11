@@ -7,6 +7,7 @@ import {
   MailIcon,
 } from "../../components/icons";
 import { AuthLayout } from "./AuthLayout";
+import { useNavigate } from "react-router";
 
 export interface LoginFormValues {
   email: string;
@@ -20,14 +21,41 @@ interface LoginPageProps {
 }
 
 export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState<string | null>(null)
 
-  function handleSubmit(e: FormEvent) {
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit?.({ email, password, remember });
+
+    const formData = new FormData(e.currentTarget)
+    const username = formData.get('username')
+    const password = formData.get('password')
+
+    const TOKEN_KEY = 'token'
+
+    try {
+      const response = await fetch('http://127.0.0.1:5001/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password })
+      })
+
+      if (!response.ok) {
+        setMessage('There was an error logging you in.')
+      }
+
+      const data = await response.json()
+
+      localStorage.setItem(TOKEN_KEY, data.access_token)
+      navigate('/', { replace: true })
+    } catch (error: any) {
+      setMessage(error.message)
+    }
   }
 
   return (
@@ -45,11 +73,10 @@ export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
             <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
               <MailIcon size={15} className="text-ink-faint" />
               <input
-                type="email"
-                placeholder="you@school.edu"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
+                type="text"
+                placeholder="you.1"
+                autoComplete="username"
+                name="username"
                 required
                 className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
               />
@@ -63,9 +90,8 @@ export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
+                name="password"
                 required
                 className="min-w-0 flex-1 border-none bg-transparent text-[13.5px] text-ink outline-none placeholder:text-ink-faint"
               />

@@ -6,13 +6,9 @@ import {
   Routes,
   useNavigate,
 } from "react-router";
-import { ExploreDecks } from "./components/ExploreDecks";
-import { Hero } from "./components/Hero";
-import { RecentDecks } from "./components/RecentDecks";
-import { Sidebar } from "./components/Sidebar";
-import { TopBar } from "./components/TopBar";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
+import Dashboard from "./pages/DashboardPage";
 
 const TOKEN_KEY = "token";
 
@@ -59,33 +55,18 @@ function RegisterRoute() {
   );
 }
 
-function DashboardRoute() {
-  return (
-    <div className="flex h-screen w-full overflow-hidden bg-app">
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar />
-        <div className="flex-1 overflow-y-auto pb-8">
-          <Hero />
-          <RecentDecks />
-          <ExploreDecks />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginRoute />} />
-        <Route path="/register" element={<RegisterRoute />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              <DashboardRoute />
+              <Dashboard />
             </ProtectedRoute>
           }
         />
