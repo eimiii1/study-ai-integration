@@ -15,6 +15,13 @@ export interface QuickAction {
   icon: string;
 }
 
+export interface Deck {
+  id: number;
+  title: string;
+  description: string;
+  parent_deck_id: number | null;
+}
+
 export interface DeckCard {
   id: string;
   avatarColors: string[];

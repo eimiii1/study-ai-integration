@@ -13,7 +13,6 @@ const Dashboard = () => {
         <div className="flex-1 overflow-y-auto pb-8">
           <Hero />
           <RecentDecks />
-          <ExploreDecks />
         </div>
       </div>
     </div>
