@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactElement, SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement> & { size?: number };
 
@@ -370,6 +370,32 @@ export function ArrowRightIcon({ size = 15, ...rest }: IconProps) {
   );
 }
 
+export function TrashIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10 11v5M14 11v5" />
+    </svg>
+  );
+}
+
+export function PencilIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="m5 19 1-4L16.5 4.5a1.4 1.4 0 0 1 2 0l1 1a1.4 1.4 0 0 1 0 2L9 18l-4 1Z" />
+      <path d="m14.5 6.5 3 3" />
+    </svg>
+  );
+}
+
+export function LogOutIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M10 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4" />
+      <path d="m14 8 4 4-4 4M18 12H9" />
+    </svg>
+  );
+}
+
 export function IconIndex({
   name,
   size,
@@ -377,7 +403,7 @@ export function IconIndex({
   name: string;
   size?: number;
 }) {
-  const map: Record<string, (p: IconProps) => JSX.Element> = {
+  const map: Record<string, (p: IconProps) => ReactElement> = {
     home: HomeIcon,
     decks: DecksIcon,
     profile: ProfileIcon,

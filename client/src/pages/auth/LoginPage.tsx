@@ -8,57 +8,37 @@ import {
 } from "../../components/icons";
 import { AuthLayout } from "./AuthLayout";
 import { useNavigate } from "react-router";
-import { a } from "framer-motion/client";
+import { apiFetch, TOKEN_KEY } from "../../lib/api";
 
-export interface LoginFormValues {
-  email: string;
-  password: string;
-  remember: boolean;
-}
-
-interface LoginPageProps {
-  onSubmit?: (values: LoginFormValues) => void;
-  onGoToRegister?: () => void;
-}
-
-export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
+export function LoginPage() {
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setMessage(null);
 
-    const formData = new FormData(e.currentTarget)
-    const username = formData.get('username')
-    const password = formData.get('password')
-
-    const TOKEN_KEY = 'token'
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username");
+    const password = formData.get("password");
 
     try {
-      const response = await fetch('http://127.0.0.1:5001/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password })
-      })
+      const data = await apiFetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
 
-      if (!response.ok) {
-        setMessage('There was an error logging you in.')
-        return
-      }
-
-      const data = await response.json()
-
-      localStorage.setItem(TOKEN_KEY, data.access_token)
-      navigate('/', { replace: true })
-    } catch (error: any) {
-      setMessage(error.message)
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+      navigate("/", { replace: true });
+    } catch (error: unknown) {
+      setMessage(
+        error instanceof Error ? error.message : "There was an error logging you in.",
+      );
     }
-  }
+  };
 
   return (
     <AuthLayout
@@ -124,6 +104,8 @@ export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
           </button>
         </div>
 
+        {message && <p className="m-0 mb-3 text-[12.5px] text-danger">{message}</p>}
+
         <button
           type="submit"
           className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-violet text-[13.5px] font-semibold text-app hover:bg-violet-strong"
@@ -148,7 +130,11 @@ export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
 
       <p className="m-0 text-center text-[12.5px] text-ink-muted">
         Don't have an account?{" "}
-        <button type="button" onClick={onGoToRegister} className="font-medium text-ink">
+        <button
+          type="button"
+          onClick={() => navigate("/register")}
+          className="font-medium text-ink"
+        >
           Create one
         </button>
       </p>
