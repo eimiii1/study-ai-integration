@@ -8,6 +8,7 @@ import {
 } from "../../components/icons";
 import { AuthLayout } from "./AuthLayout";
 import { useNavigate } from "react-router";
+import { a } from "framer-motion/client";
 
 export interface LoginFormValues {
   email: string;
@@ -47,6 +48,7 @@ export function LoginPage({ onSubmit, onGoToRegister }: LoginPageProps) {
 
       if (!response.ok) {
         setMessage('There was an error logging you in.')
+        return
       }
 
       const data = await response.json()
