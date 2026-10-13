@@ -7,9 +7,9 @@ import type {
 } from "./types";
 
 export const navItems: NavItem[] = [
-  { label: "Home", icon: "home", active: true },
-  { label: "Decks", icon: "decks" },
-  { label: "Profile", icon: "profile" },
+  { label: "Home", icon: "home", to: "/" },
+  { label: "Decks", icon: "decks", to: "/decks" },
+  { label: "Profile", icon: "profile", to: "/profile" },
 ];
 
 export const agentTabs: AgentTab[] = [

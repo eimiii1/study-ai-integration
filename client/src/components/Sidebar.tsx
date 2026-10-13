@@ -1,42 +1,10 @@
+import { NavLink } from "react-router";
 import { navItems } from "../data";
+import { useCurrentUser } from "../hooks/useCurrentUser";
 import { ChevronDownIcon, IconIndex, SearchIcon, WindowIcon } from "./icons";
-import { useState, useEffect } from "react";
-import type { User } from "../types";
 
 export function Sidebar() {
-  const [user, setUser] = useState<User | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const TOKEN = localStorage.getItem('token')
-        const response = await fetch('http://127.0.0.1:5001/api/me', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${TOKEN}`
-          }
-        })
-
-        if (!response.ok) {
-          throw new Error(`Server responded with status: ${response.status}`)
-        }
-
-        const data = await response.json()
-        const id = data.id
-        const username = data.username
-        const email = data.email
-
-        setUser({ id, username, email })
-
-      } catch (error: any) {
-        setMessage(error.message)
-        console.log(error.message)
-      }
-    }
-
-    fetchUser()
-  }, [])
+  const { user, isLoading } = useCurrentUser();
 
   return (
     <aside className="flex h-full w-46 flex-shrink-0 flex-col border-r border-hairline bg-sidebar p-2.5">
@@ -66,11 +34,12 @@ export function Sidebar() {
         <ul className="flex flex-col gap-px">
           {navItems.map((item) => (
             <li key={item.label}>
-              <a
-                href="#"
-                className={
+              <NavLink
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
                   "flex items-center gap-2 rounded-[6px] px-1.5 py-1.5 text-[12.5px] no-underline " +
-                  (item.active
+                  (isActive
                     ? "bg-elevated font-medium text-ink"
                     : "text-ink-dim hover:bg-elevated hover:text-ink")
                 }
@@ -79,7 +48,7 @@ export function Sidebar() {
                   <IconIndex name={item.icon} size={15} />
                 </span>
                 <span className="flex-1">{item.label}</span>
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -101,11 +70,9 @@ export function Sidebar() {
 
         <div className="mt-1 flex items-center gap-2 px-1.5 pb-0.5 pt-2">
           <span className="h-[18px] w-[18px] rounded-full bg-[#c9655f]" />
-          {!user ? (
-            <span className="flex-1 text-[12.5px] text-ink">Loading...</span>
-          ) : (
-            <span className="flex-1 text-[12.5px] text-ink">{user?.username}</span>
-          )}
+          <span className="flex-1 text-[12.5px] text-ink">
+            {isLoading ? "Loading..." : user?.username ?? "Not signed in"}
+          </span>
           <span className="text-[13px] text-ink-muted">⋯</span>
         </div>
       </div>
