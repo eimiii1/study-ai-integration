@@ -1,50 +1,101 @@
 import { useCallback, useEffect, useState } from "react";
+import { apiFetch } from "../lib/api";
 import type { Deck } from "../types";
 
-const API_BASE = 'http://192.168.100.7:5001'
-const TOKEN_KEY = 'token'
+type UseDecksResult = {
+  decks: Deck[];
+  isLoading: boolean;
+  error: string | null;
+  refetch: () => void;
+  createDeck: (
+    title: string,
+    description?: string,
+    parentDeckId?: number,
+  ) => Promise<Deck>;
+  updateDeck: (id: number, title: string, description: string) => Promise<void>;
+  deleteDeck: (id: number) => Promise<void>;
+};
 
-type useDecksResult = {
-    decks: Deck[];
-    isLoading: boolean;
-    error: string | null;
-    refetch: () => void;
-}
+export const useDecks = (): UseDecksResult => {
+  const [decks, setDecks] = useState<Deck[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export const useDecks = (): useDecksResult => {
-    const [decks, setDecks] = useState<Deck[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+  const [fetchKey, setFetchKey] = useState(0);
 
-    const fetchDecks = useCallback(async () => {
-        setIsLoading(true)
-        setError(null)
+  // Used after mutations to re-sync with the server (fresh card/subdeck counts)
+  // without flashing a spinner. Only ever called from event handlers.
+  const sync = useCallback(async () => {
+    try {
+      setDecks(await apiFetch("/api/decks"));
+      setError(null);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to load decks.");
+    }
+  }, []);
 
-        try {
-            const token = localStorage.getItem(TOKEN_KEY)
-            const response = await fetch(`${API_BASE}/api/decks`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
+  useEffect(() => {
+    let cancelled = false;
 
-            if (!response.ok) {
-                throw new Error("Failed to load decks.")
-            }
-
-            const data = await response.json()
-            setDecks(data)
-        } catch (err: any) {
-            setError(err.message ?? "Something went wrong.")
-        } finally {
-            setIsLoading(false)
+    const fetchDecks = async () => {
+      try {
+        const data = await apiFetch("/api/decks");
+        if (!cancelled) {
+          setDecks(data);
+          setError(null);
         }
-    }, [])
+      } catch (err: unknown) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Failed to load decks.");
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
 
-    useEffect(() => {
-        fetchDecks()
-    }, [fetchDecks])
+    fetchDecks();
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchKey]);
 
-    return { decks, isLoading, error, refetch: fetchDecks }
-}
+  const refetch = useCallback(() => {
+    setIsLoading(true);
+    setFetchKey((k) => k + 1);
+  }, []);
+
+  const createDeck = useCallback(
+    async (title: string, description = "", parentDeckId?: number) => {
+      const newDeck: Deck = await apiFetch("/api/decks", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          description,
+          ...(parentDeckId !== undefined ? { parent_deck_id: parentDeckId } : {}),
+        }),
+      });
+      await sync();
+      return newDeck;
+    },
+    [sync],
+  );
+
+  const updateDeck = useCallback(
+    async (id: number, title: string, description: string) => {
+      await apiFetch(`/api/decks/${id}`, {
+        method: "PUT",
+        body: JSON.stringify({ title, description }),
+      });
+      await sync();
+    },
+    [sync],
+  );
+
+  // No local state update here on purpose: the caller navigates away right
+  // after, and every page that lists decks refetches when it mounts.
+  const deleteDeck = useCallback(async (id: number) => {
+    await apiFetch(`/api/decks/${id}`, { method: "DELETE" });
+  }, []);
+
+  return { decks, isLoading, error, refetch, createDeck, updateDeck, deleteDeck };
+};
