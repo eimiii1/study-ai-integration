@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router";
 import { DeckTile } from "../../components/DeckTile";
 import { PlusIcon } from "../../components/icons";
 import { InlineForm } from "../../components/InlineForm";
@@ -9,7 +10,12 @@ import { primaryButton } from "../../lib/ui";
 
 export function DecksPage() {
   const { decks, isLoading, error, refetch, createDeck } = useDecks();
-  const [isCreating, setIsCreating] = useState(false);
+  // Hero's "Create a deck" quick action / chat routing lands here with this
+  // flag set so the form is already open instead of making you click again.
+  const location = useLocation();
+  const [isCreating, setIsCreating] = useState(
+    Boolean((location.state as { openCreate?: boolean } | null)?.openCreate),
+  );
 
   const topLevelDecks = decks.filter((deck) => deck.parent_deck_id === null);
 
@@ -29,8 +35,8 @@ export function DecksPage() {
           <div className="mb-5 max-w-120">
             <InlineForm
               fields={[
-                { name: "title", label: "Title", placeholder: "Organic Chemistry — Unit 4", required: true },
-                { name: "description", label: "Description", placeholder: "What's this deck about?", multiline: true },
+                { name: "title", label: "Title", placeholder: "Organic Chemistry — Unit 4", required: true, maxLength: 120 },
+                { name: "description", label: "Description", placeholder: "What's this deck about?", multiline: true, maxLength: 500 },
               ]}
               submitLabel="Create deck"
               onSubmit={async (v) => {

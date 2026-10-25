@@ -14,12 +14,14 @@ export function LoginPage() {
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage(null);
+    setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username");
@@ -37,6 +39,8 @@ export function LoginPage() {
       setMessage(
         error instanceof Error ? error.message : "There was an error logging you in.",
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -99,7 +103,12 @@ export function LoginPage() {
             />
             <span>Remember me</span>
           </label>
-          <button type="button" className="text-[12.5px] text-ink-dim hover:text-ink">
+          <button
+            type="button"
+            disabled
+            title="Not available yet"
+            className="cursor-not-allowed text-[12.5px] text-ink-faint opacity-60"
+          >
             Forgot password?
           </button>
         </div>
@@ -108,10 +117,14 @@ export function LoginPage() {
 
         <button
           type="submit"
-          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-violet text-[13.5px] font-semibold text-app hover:bg-violet-strong"
+          disabled={isSubmitting}
+          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-violet text-[13.5px] font-semibold text-app hover:bg-violet-strong disabled:opacity-60"
         >
-          <span>Sign in</span>
-          <ArrowRightIcon size={14} />
+          {isSubmitting && (
+            <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-app/40 border-t-app" />
+          )}
+          <span>{isSubmitting ? "Signing in..." : "Sign in"}</span>
+          {!isSubmitting && <ArrowRightIcon size={14} />}
         </button>
       </form>
 
@@ -120,10 +133,20 @@ export function LoginPage() {
       </div>
 
       <div className="mb-7 flex gap-2.5">
-        <button className="flex h-9.5 flex-1 items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-dim hover:bg-panel-hover hover:text-ink">
+        <button
+          type="button"
+          disabled
+          title="Not available yet"
+          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-faint opacity-60"
+        >
           Google
         </button>
-        <button className="flex h-9.5 flex-1 items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-dim hover:bg-panel-hover hover:text-ink">
+        <button
+          type="button"
+          disabled
+          title="Not available yet"
+          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-faint opacity-60"
+        >
           Microsoft
         </button>
       </div>

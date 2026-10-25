@@ -1,4 +1,5 @@
 import { exploreDecks } from "../data";
+import { badgeClass, cardClass } from "../lib/ui";
 import { ExpandIcon, FilterIcon, SearchIcon } from "./icons";
 
 export function ExploreDecks() {
@@ -26,7 +27,7 @@ export function ExploreDecks() {
         {exploreDecks.map((deck) => (
           <article
             key={deck.id}
-            className="rounded-[10px] border border-line bg-panel p-3.25"
+            className={cardClass + " p-3.25 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"}
           >
             <div className="mb-2.25 flex items-center gap-2">
               <span
@@ -38,13 +39,9 @@ export function ExploreDecks() {
               <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[12.5px] font-medium text-ink">
                 {deck.name}
               </span>
-              {deck.trending && (
-                <span className="flex-shrink-0 rounded-[4px] border border-line-strong px-1.5 py-0.5 text-[10px] text-ink-muted">
-                  Trending
-                </span>
-              )}
+              {deck.trending && <span className={badgeClass}>Trending</span>}
             </div>
-            <p className="m-0 line-clamp-2 text-[11.5px] leading-relaxed text-ink-muted">
+            <p className="m-0 line-clamp-2 min-h-[2.6em] text-[12px] leading-relaxed text-ink-muted">
               {deck.description}
             </p>
           </article>

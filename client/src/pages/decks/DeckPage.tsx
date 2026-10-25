@@ -131,8 +131,8 @@ function DeckView({ deckId }: { deckId: number }) {
             <div className="max-w-120">
               <InlineForm
                 fields={[
-                  { name: "title", label: "Title", required: true },
-                  { name: "description", label: "Description", multiline: true },
+                  { name: "title", label: "Title", required: true, maxLength: 120 },
+                  { name: "description", label: "Description", multiline: true, maxLength: 500 },
                 ]}
                 initialValues={{ title: deck.title, description: deck.description }}
                 submitLabel="Save changes"

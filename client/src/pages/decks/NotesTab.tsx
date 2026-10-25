@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router";
+import { useLocation, useOutletContext } from "react-router";
 import { PencilIcon, PlusIcon, TrashIcon } from "../../components/icons";
 import { InlineForm, type FormField } from "../../components/InlineForm";
 import { ErrorNotice, LoadingText } from "../../components/Status";
@@ -8,8 +8,8 @@ import { ghostButton, iconButton } from "../../lib/ui";
 import type { DeckOutletContext, Note, NoteInput } from "../../types";
 
 const fields: FormField[] = [
-  { name: "title", label: "Title", required: true },
-  { name: "content", label: "Content", multiline: true, required: true },
+  { name: "title", label: "Title", required: true, maxLength: 120 },
+  { name: "content", label: "Content", multiline: true, required: true, maxLength: 4000 },
 ];
 
 export function NotesTab() {
@@ -17,7 +17,11 @@ export function NotesTab() {
   const { items: notes, isLoading, error, refetch, create, update, remove } =
     useDeckItems<Note, NoteInput>(deck.id, "notes");
 
-  const [isAdding, setIsAdding] = useState(false);
+  // Hero can route here asking to add a note straight away.
+  const location = useLocation();
+  const [isAdding, setIsAdding] = useState(
+    Boolean((location.state as { openAdd?: boolean } | null)?.openAdd),
+  );
   const [editingId, setEditingId] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 

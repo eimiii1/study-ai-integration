@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router";
+import { useLocation, useOutletContext } from "react-router";
 import { PencilIcon, PlusIcon, TrashIcon } from "../../components/icons";
 import { InlineForm, type FormField } from "../../components/InlineForm";
 import { ErrorNotice, LoadingText } from "../../components/Status";
@@ -8,8 +8,8 @@ import { ghostButton, iconButton } from "../../lib/ui";
 import type { DeckOutletContext, Flashcard, FlashcardInput } from "../../types";
 
 const fields: FormField[] = [
-  { name: "front", label: "Front", placeholder: "Question or term", multiline: true, required: true },
-  { name: "back", label: "Back", placeholder: "Answer or definition", multiline: true, required: true },
+  { name: "front", label: "Front", placeholder: "Question or term", multiline: true, required: true, maxLength: 300 },
+  { name: "back", label: "Back", placeholder: "Answer or definition", multiline: true, required: true, maxLength: 300 },
 ];
 
 export function FlashcardsTab() {
@@ -17,7 +17,11 @@ export function FlashcardsTab() {
   const { items: cards, isLoading, error, refetch, create, update, remove } =
     useDeckItems<Flashcard, FlashcardInput>(deck.id, "flashcards");
 
-  const [isAdding, setIsAdding] = useState(false);
+  // Hero can route here asking to add a flashcard straight away.
+  const location = useLocation();
+  const [isAdding, setIsAdding] = useState(
+    Boolean((location.state as { openAdd?: boolean } | null)?.openAdd),
+  );
   const [editingId, setEditingId] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 

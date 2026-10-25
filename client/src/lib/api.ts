@@ -1,7 +1,5 @@
 export const TOKEN_KEY = "token";
 
-// Single source of truth for the backend URL. Override with VITE_API_URL
-// in a .env file (see .env.example) instead of editing this file per machine.
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL ?? "http://127.0.0.1:5001";
 
@@ -17,14 +15,6 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * Thin wrapper around fetch that attaches the JWT + JSON headers,
- * resolves relative paths against API_BASE_URL, and throws ApiError
- * on non-2xx responses so callers can just try/catch.
- *
- * A 401 on an authenticated request means the token expired or is invalid,
- * so we drop it and send the user back to the login page.
- */
 export async function apiFetch(path: string, init: RequestInit = {}) {
   const token = localStorage.getItem(TOKEN_KEY);
 
@@ -48,7 +38,7 @@ export async function apiFetch(path: string, init: RequestInit = {}) {
       const body = await response.json();
       message = body?.error ?? message;
     } catch {
-      // response had no JSON body; fall back to the generic message
+      return
     }
     throw new ApiError(message, response.status);
   }

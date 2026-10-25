@@ -396,6 +396,31 @@ export function LogOutIcon({ size = 14, ...rest }: IconProps) {
   );
 }
 
+export function CheckIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="m4 12 5 5L20 6" />
+    </svg>
+  );
+}
+
+export function XIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+export function SparklesIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M11 3 12.4 8.6 18 10 12.4 11.4 11 17 9.6 11.4 4 10 9.6 8.6 11Z" />
+      <path d="M18 3.5 18.6 5.4 20.5 6 18.6 6.6 18 8.5 17.4 6.6 15.5 6 17.4 5.4Z" />
+    </svg>
+  );
+}
+
 export function IconIndex({
   name,
   size,

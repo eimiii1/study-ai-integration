@@ -33,8 +33,8 @@ export function SubdecksTab() {
         <div className="mb-4 max-w-120">
           <InlineForm
             fields={[
-              { name: "title", label: "Title", required: true },
-              { name: "description", label: "Description", multiline: true },
+              { name: "title", label: "Title", required: true, maxLength: 120 },
+              { name: "description", label: "Description", multiline: true, maxLength: 500 },
             ]}
             submitLabel="Create subdeck"
             onSubmit={async (v) => {

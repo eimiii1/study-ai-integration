@@ -22,7 +22,7 @@ def study_deck(deck_id):
         return jsonify({
             'quiz_id': existing_quiz.id,
             'questions': [
-                {'id': q.id, 'question_text': q.question_text, 'choices': q.choices}
+                {'id': q.id, 'question_text': q.question_text, 'choices': q.choices, 'correct_answer': q.correct_answer}
                 for q in existing_quiz.questions
             ]
         }), 200
@@ -61,7 +61,7 @@ def study_deck(deck_id):
     return jsonify({
         'quiz_id': new_quiz.id,
         'questions': [
-            {'id': q.id, 'question_text': q.question_text, 'choices': q.choices}
+            {'id': q.id, 'question_text': q.question_text, 'choices': q.choices, 'correct_answer': q.correct_answer}
             for q in new_quiz.questions
         ]
     }), 200
