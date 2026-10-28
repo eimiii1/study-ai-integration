@@ -43,11 +43,8 @@ Decks support **one level of nesting**. Pass `parent_deck_id` when creating a de
 
 ## Quizzes
 
-<<<<<<< HEAD
 A quiz is generated automatically from a deck's flashcards via the Groq API — there's no manual quiz-creation route. The first call to `/study` generates and saves the quiz; later calls return the saved version instead of calling the AI again. The generator mixes three question types across a quiz — `multiple_choice`, `identification`, and `fill_in_blank` — choosing per-flashcard based on how the content fits; each question also gets a `difficulty` and an `explanation`. Answers are graded server-side, since grading is also what decides furniture drops.
-=======
 A quiz is generated automatically from a deck's flashcards via the Groq API — there's no manual quiz-creation route. The first call to `/study` generates and saves the quiz; later calls return the saved version instead of calling the AI again.
->>>>>>> 3b73fe78eb4e48326814e83857dbf3f31bfa8e57
 
 | Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |
@@ -67,4 +64,4 @@ Furniture is earned by answering quiz questions correctly (see `POST /study/answ
 | PUT | `/api/room/<item_id>` | Update a placed item — move it (`x`, `y`, `wall_side`), flip it (`flipped`), or resize it (`scale`, clamped to 60–140) | Yes |
 | DELETE | `/api/room/<item_id>` | Remove a placed item and return it to inventory | Yes |
 
-Placement is validated server-side: an item can't go in the wrong zone (a wall-only item onto the floor, or vice versa), outside the grid, or onto a tile/slot another item already occupies.
+Placement is validated server-side: an item can't go in the wrong zone (a wall-only item onto the floor, or vice versa), outside the grid, or onto a tile another item already occupies.

@@ -27,4 +27,4 @@ curl -X <METHOD> http://127.0.0.1:5001/<ENDPOINT> \
 
 - The server listens on port **5001**, not Flask's usual 5000 (see `app.run(...)` in `server/app.py`) — double-check your base URL if you're getting connection-refused errors.
 - Tokens expire (see `JWT_ACCESS_TOKEN_EXPIRES` in `config.py` — currently 24 hours). If a protected route suddenly starts returning `401`, log in again for a fresh token.
-- Never paste a real token into a shared doc, commit, or public channel — treat it like a password.
+- Never paste a real token into a shared doc, commit, or public channel.
