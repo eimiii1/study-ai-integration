@@ -1,52 +1,96 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@500&display=swap");
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-sans: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
-  /* Surfaces */
-  --color-app: #0a0a0b;
-  --color-sidebar: #050505;
-  --color-panel: #111113;
-  --color-panel-hover: #18181a;
-  --color-elevated: #1c1c1e;
-  --color-input: #131314;
+  /* Surfaces — a bound notebook: pale stone "page" content against an ink
+     "spine" rail, not one flat tone stretched across the whole screen. */
+  --color-app: #f4f2e9;
+  --color-sidebar: #1d2420;
+  --color-panel: #ffffff;
+  --color-panel-hover: #fdfbf3;
+  --color-elevated: #ebe7d8;
+  --color-input: #ffffff;
 
-  /* Borders */
-  --color-hairline: #1f1f21;
-  --color-line: #27272a;
-  --color-line-strong: #333336;
+  /* Borders — warm stone, tinted toward the page, not neutral grey */
+  --color-hairline: #e6e1cf;
+  --color-line: #ddd7bf;
+  --color-line-strong: #c7bfa0;
 
-  /* Text */
-  --color-ink: #f4f4f5;
-  --color-ink-dim: #9a9a9e;
-  --color-ink-muted: #6b6b6f;
-  --color-ink-faint: #4a4a4d;
+  /* Text — ink on paper, never pure black */
+  --color-ink: #23271f;
+  --color-ink-dim: #4d5244;
+  --color-ink-muted: #71735f;
+  --color-ink-faint: #9a977d;
 
-  /* Accents */
-  --color-violet: #9b8cf0;
-  --color-violet-strong: #a99cf4;
-  --color-pink: #ef7fb0;
-  --color-orange: #f0a24d;
-  --color-teal: #4fc3b0;
-  --color-blue: #5b9bd9;
-  --color-green: #39b67a;
-  --color-danger: #ef7f7f;
+  /* Text on the dark sidebar rail — a separate scale, not a dimmed version
+     of the paper-ink scale above. */
+  --color-rail-ink: #f1efe2;
+  --color-rail-dim: #aab0a2;
+  --color-rail-faint: #6c7467;
+  --color-rail-line: #2c342e;
 
-  /* Shadows */
-  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.18), 0 8px 20px -8px rgba(0, 0, 0, 0.35);
-  --shadow-lift: 0 4px 10px -2px rgba(0, 0, 0, 0.3), 0 14px 32px -12px rgba(0, 0, 0, 0.45);
+  /* Accents — brick clay (primary), moss (secondary), ochre + berry + ink-
+     blue + olive for per-deck variety. Token names kept from the previous
+     pass so utilities cascade, but every value below is a new, unrelated
+     color choice, not a retint of the old amber/teal set. */
+  --color-violet: #b6512f;
+  --color-violet-strong: #9c4226;
+  --color-pink: #9c3f5c;
+  --color-orange: #b8862f;
+  --color-teal: #3e6b5c;
+  --color-blue: #3c5a78;
+  --color-green: #5c7a43;
+  --color-danger: #a93a2c;
+  --color-gold: #b8862f;
+
+  /* Shadows — two families: a soft lift for floating chrome (menus,
+     toolbars) and a hard "sticker" offset for cards, the signature shape
+     device of this pass. */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.1), 0 8px 20px -8px rgba(0, 0, 0, 0.18);
+  --shadow-lift: 0 4px 10px -2px rgba(0, 0, 0, 0.18), 0 14px 32px -12px rgba(0, 0, 0, 0.28);
+  --shadow-sticker: 3px 3px 0 0 var(--color-ink);
+  --shadow-sticker-sm: 2px 2px 0 0 var(--color-ink);
+  --shadow-glow-amber: 0 0 0 1px rgba(182, 81, 47, 0.35), 0 0 24px -4px rgba(182, 81, 47, 0.35);
 }
 
 html,
 body {
   background: var(--color-app);
   color: var(--color-ink);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "cv11", "ss01";
 }
 
 #root {
   height: 100vh;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01";
+}
+
+.font-display-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-feature-settings: "ss01";
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* The hard-edged "sticker" card: solid ink border + offset block shadow
+   instead of a soft blurred one. Used for anything meant to read as a
+   physical card on the page rather than a floating panel. */
+.card-sticker {
+  border: 1.5px solid var(--color-ink);
+  box-shadow: var(--shadow-sticker);
 }
 
 /* Smooth, consistent motion on every interactive element without having to
@@ -113,4 +157,18 @@ textarea:focus-visible {
 
 .animate-fade-in-up {
   animation: fade-in-up 180ms ease both;
+}
+
+@keyframes hud-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.animate-hud-pulse {
+  animation: hud-pulse 1.6s ease-in-out infinite;
 }

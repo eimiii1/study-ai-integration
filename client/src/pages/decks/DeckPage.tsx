@@ -145,7 +145,7 @@ function DeckView({ deckId }: { deckId: number }) {
             </div>
           ) : (
             <>
-              <h1 className="m-0 text-[20px] font-medium tracking-tight text-ink">{deck.title}</h1>
+              <h1 className="font-display m-0 text-[22px] font-medium tracking-tight text-ink">{deck.title}</h1>
               <p className="m-0 mt-1.5 max-w-180 text-[13px] leading-relaxed text-ink-muted">
                 {deck.description || "No description yet."}
               </p>

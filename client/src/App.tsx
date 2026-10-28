@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   Navigate,
   Route,
@@ -16,6 +17,9 @@ import { NotesTab } from "./pages/decks/NotesTab";
 import { StudyTab } from "./pages/decks/StudyTab";
 import { SubdecksTab } from "./pages/decks/SubdecksTab";
 import { ProfilePage } from "./pages/ProfilePage";
+import { RoomPage } from "./pages/RoomPage";
+import { useState } from "react";
+import { LoadingScreen } from "./components/LoadingScreen";
 
 // Layout route: signed-in users get the sidebar shell, everyone else goes to /login.
 function ProtectedRoute() {
@@ -25,9 +29,21 @@ function ProtectedRoute() {
   return <AppLayout />;
 }
 
+// The room is a full-screen game view with no sidebar chrome, but still
+// requires auth — same check as ProtectedRoute, just without the shell.
+function RequireAuth({ children }: { children: ReactNode }) {
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+  return <>{children}</>;
+}
+
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
     <Router>
+      {loading && <LoadingScreen onDone={() => setLoading(false)} />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -43,6 +59,15 @@ export default function App() {
           </Route>
           <Route path="profile" element={<ProfilePage />} />
         </Route>
+
+        <Route
+          path="room"
+          element={
+            <RequireAuth>
+              <RoomPage />
+            </RequireAuth>
+          }
+        />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

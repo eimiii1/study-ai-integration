@@ -17,7 +17,7 @@ export function FlashcardsTab() {
   const { items: cards, isLoading, error, refetch, create, update, remove } =
     useDeckItems<Flashcard, FlashcardInput>(deck.id, "flashcards");
 
-  // Hero can route here asking to add a flashcard straight away.
+  // Reachable with { state: { openAdd: true } } to jump straight to adding a flashcard.
   const location = useLocation();
   const [isAdding, setIsAdding] = useState(
     Boolean((location.state as { openAdd?: boolean } | null)?.openAdd),

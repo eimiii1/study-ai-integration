@@ -6,6 +6,7 @@ from routes.decks import decks_bp
 from routes.flashcards import flashcards_bp
 from routes.notes import notes_bp
 from routes.quizzes import quizzes_bp
+from routes.furniture import furniture_bp
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
@@ -20,12 +21,13 @@ app.register_blueprint(decks_bp)
 app.register_blueprint(flashcards_bp)
 app.register_blueprint(notes_bp)
 app.register_blueprint(quizzes_bp)
+app.register_blueprint(furniture_bp)
 
 jwt = JWTManager(app)
 
 @app.route('/')
 def home():
-    return "Hello nig"
+    return "API is running."
 
 if __name__ == '__main__':
     with app.app_context():

@@ -39,7 +39,7 @@
     DATABASE_URL=mysql+pymysql://USERNAME:PASSWORD@localhost/DATABASE_NAME
     SECRET_KEY=your-secret-key
     JWT_SECRET_KEY=your-jwt-secret-key
-    GEMINI_API_KEY=your-gemini-api-key
+    GROQ_API_KEY=your-groq-api-key
     ```
     
 6. Run the backend

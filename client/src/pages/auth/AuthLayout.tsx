@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { SparkIcon } from "../../components/icons";
 
 interface AuthLayoutProps {
   eyebrow: string;
@@ -10,33 +9,31 @@ interface AuthLayoutProps {
 export function AuthLayout({ eyebrow, headline, children }: AuthLayoutProps) {
   return (
     <div className="flex min-h-screen w-full bg-app">
-      <div className="relative hidden max-w-120 flex-[0_0_42%] flex-col justify-center overflow-hidden border-r border-hairline bg-sidebar p-14 lg:flex">
-        <div
-          className="pointer-events-none absolute -bottom-45 -right-45 h-105 w-105 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle at center, rgba(155,140,240,0.14), transparent 70%)",
-          }}
-        />
+      <div className="relative hidden max-w-120 flex-[0_0_42%] flex-col justify-center overflow-hidden border-r-[1.5px] border-[#2c342e] bg-sidebar p-14 lg:flex">
+        <span
+          aria-hidden
+          className="font-display pointer-events-none absolute -left-4 -top-10 select-none text-[220px] italic leading-none text-[#262e27]"
+        >
+          “
+        </span>
 
-        <div className="mb-11 flex h-7.5 w-7.5 items-center justify-center rounded-[7px] bg-[#e8554f]">
-          <span className="text-[16px] font-bold text-white">D</span>
+        <div className="relative z-10 mb-10 flex items-center gap-2.5">
+          <span className="flex h-7.5 w-7.5 items-center justify-center rounded-[6px] border-[1.5px] border-[#3a443c] bg-violet text-[15px] font-bold text-[#fbf8ee]">
+            D
+          </span>
+          <span className="text-[11px] tracking-[0.02em] text-[#6c7467]">Deckly — your study desk</span>
         </div>
 
-        <div className="mb-5 text-ink">
-          <SparkIcon size={34} />
-        </div>
-
-        <h2 className="m-0 mb-2.5 max-w-80 text-[26px] font-medium leading-snug tracking-tight text-ink">
+        <h2 className="font-display relative z-10 m-0 mb-3 max-w-85 text-[32px] font-medium leading-[1.2] text-[#f1efe2]">
           {headline}
         </h2>
-        <p className="m-0 max-w-75 text-[13px] leading-relaxed text-ink-muted">{eyebrow}</p>
+        <p className="relative z-10 m-0 max-w-75 text-[13.5px] leading-relaxed text-[#aab0a2]">{eyebrow}</p>
 
-        <div className="relative z-10 mt-9 flex gap-1.5">
-          {["violet", "pink", "orange"].map((c) => (
+        <div className="relative z-10 mt-10 flex items-center gap-1.5">
+          {["violet", "pink", "orange", "teal"].map((c) => (
             <span
               key={c}
-              className="h-2 w-2 rounded-full"
+              className="h-1.5 w-1.5 rounded-full"
               style={{ background: `var(--color-${c})` }}
             />
           ))}

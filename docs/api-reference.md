@@ -43,7 +43,7 @@ Decks support **one level of nesting**. Pass `parent_deck_id` when creating a
 
 ## Quizzes
 
-A quiz is generated automatically from a deck's flashcards via the Gemini API — there's no manual quiz-creation route. The first call to `/study` generates and saves the quiz; later calls return the saved version instead of calling the AI again.
+A quiz is generated automatically from a deck's flashcards via the Groq API — there's no manual quiz-creation route. The first call to `/study` generates and saves the quiz; later calls return the saved version instead of calling the AI again.
 
 | Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |

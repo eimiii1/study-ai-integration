@@ -18,17 +18,15 @@ Title + content, attached to a deck or subdeck. A deck can have any number of no
 
 ## Quizzes (AI-generated)
 
-Clicking "Study Deck" generates a multiple-choice quiz from that deck's flashcards via the Gemini API — one question per flashcard, with the flashcard's back as the correct answer and three AI-generated incorrect choices. The quiz is generated once per deck and saved, so later study sessions reuse it instead of calling the AI again.
+Clicking "Study Deck" generates a quiz from that deck's flashcards via the Groq API — one question per flashcard, mixing multiple-choice, identification, and fill-in-the-blank. Each question also gets a difficulty rating and a short explanation of the correct answer. The quiz is generated once per deck and saved, so later study sessions reuse it instead of calling the AI again — until a flashcard in that deck is added, edited, or deleted, which invalidates the saved quiz so the next study session regenerates it from the current flashcards.
 
-Currently multiple-choice only. The data model also supports identification and fill-in-the-blank question types for future expansion.
+## Furniture Rewards & Room
 
-## Furniture Rewards
+Answering a quiz question correctly has a 50% chance to award the user a furniture item, weighted by rarity (common/rare/epic). Furniture ownership is tracked per user with a quantity, so earning a duplicate just increases its count instead of creating a new record.
 
-Answering a quiz question correctly awards the user a furniture item, meant for a future room-building feature. Furniture ownership is tracked per user, with a quantity, so earning a duplicate item just increases its count rather than creating a new record.
+The room (/room) is a full-screen isometric tile grid: a 6x6 floor plus two back walls, each with 6 slots. Every Furniture item is classified placement_zone floor or wall (frames, clocks, corkboards and wire boards are wall-only; everything else is floor-only), and the backend rejects placing an item on the wrong zone or on an already-occupied tile/slot. A placed item (RoomItem) can be flipped horizontally and resized (60%-140%); draw order (z_index) is recomputed from its tile position so items in front on the isometric grid correctly overlap items behind them.
 
 ## Planned / Not Yet Built
 
 - Email verification
-- Identification and fill-in-the-blank quiz question types
-- Furniture reward routes (the models exist, the awarding logic and routes don't yet)
 - A `/decks` response that reflects the deck/subdeck tree structure instead of a flat list
