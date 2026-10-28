@@ -43,7 +43,11 @@ Decks support **one level of nesting**. Pass `parent_deck_id` when creating a de
 
 ## Quizzes
 
+<<<<<<< HEAD
 A quiz is generated automatically from a deck's flashcards via the Groq API — there's no manual quiz-creation route. The first call to `/study` generates and saves the quiz; later calls return the saved version instead of calling the AI again. The generator mixes three question types across a quiz — `multiple_choice`, `identification`, and `fill_in_blank` — choosing per-flashcard based on how the content fits; each question also gets a `difficulty` and an `explanation`. Answers are graded server-side, since grading is also what decides furniture drops.
+=======
+A quiz is generated automatically from a deck's flashcards via the Groq API — there's no manual quiz-creation route. The first call to `/study` generates and saves the quiz; later calls return the saved version instead of calling the AI again.
+>>>>>>> 3b73fe78eb4e48326814e83857dbf3f31bfa8e57
 
 | Method | Endpoint | Description | Auth Required |
 | --- | --- | --- | --- |

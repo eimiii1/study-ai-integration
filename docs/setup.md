@@ -40,10 +40,13 @@
     SECRET_KEY=your-secret-key
     JWT_SECRET_KEY=your-jwt-secret-key
     GROQ_API_KEY=your-groq-api-key
+<<<<<<< HEAD
 
     # Optional — defaults to openai/gpt-oss-20b if omitted. Set this if
     # your Groq API key doesn't have access to the default model.
     GROQ_MODEL=openai/gpt-oss-20b
+=======
+>>>>>>> 3b73fe78eb4e48326814e83857dbf3f31bfa8e57
     ```
     
 6. Seed the furniture catalog (one-time, safe to re-run)

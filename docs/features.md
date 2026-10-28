@@ -24,9 +24,17 @@ Clicking "Study Deck" generates a quiz from that deck's flashcards via the Groq 
 
 Answering a quiz question correctly has a 50% chance to award the user a furniture item, weighted by rarity (common/rare/epic). Furniture ownership is tracked per user with a quantity, so earning a duplicate just increases its count instead of creating a new record.
 
+<<<<<<< HEAD
 The room (`/room`) is a full-screen isometric tile grid: a 6x6 floor plus two back walls, each with 6 slots. Every Furniture item is classified `placement_zone` floor or wall (frames, clocks, corkboards and wire boards are wall-only; everything else is floor-only), and the backend rejects placing an item on the wrong zone or on an already-occupied tile/slot. A placed item (RoomItem) can be flipped horizontally and resized (60%-140%); draw order (z_index) is recomputed from its tile position so items in front on the isometric grid correctly overlap items behind them.
+=======
+The room (/room) is a full-screen isometric tile grid: a 6x6 floor plus two back walls, each with 6 slots. Every Furniture item is classified placement_zone floor or wall (frames, clocks, corkboards and wire boards are wall-only; everything else is floor-only), and the backend rejects placing an item on the wrong zone or on an already-occupied tile/slot. A placed item (RoomItem) can be flipped horizontally and resized (60%-140%); draw order (z_index) is recomputed from its tile position so items in front on the isometric grid correctly overlap items behind them.
+>>>>>>> 3b73fe78eb4e48326814e83857dbf3f31bfa8e57
 
 ## Planned / Not Yet Built
 
 - Email verification
+<<<<<<< HEAD
 - A `/decks` response that reflects the deck/subdeck tree structure instead of a flat list
+=======
+- A `/decks` response that reflects the deck/subdeck tree structure instead of a flat list
+>>>>>>> 3b73fe78eb4e48326814e83857dbf3f31bfa8e57
