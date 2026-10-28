@@ -17,7 +17,7 @@ export function NotesTab() {
   const { items: notes, isLoading, error, refetch, create, update, remove } =
     useDeckItems<Note, NoteInput>(deck.id, "notes");
 
-  // Hero can route here asking to add a note straight away.
+  // Reachable with { state: { openAdd: true } } to jump straight to adding a note.
   const location = useLocation();
   const [isAdding, setIsAdding] = useState(
     Boolean((location.state as { openAdd?: boolean } | null)?.openAdd),

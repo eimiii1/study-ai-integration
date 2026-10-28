@@ -421,6 +421,42 @@ export function SparklesIcon({ size = 14, ...rest }: IconProps) {
   );
 }
 
+export function RoomIcon({ size = 16, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M4 20V10l8-6 8 6v10" />
+      <path d="M9 20v-6h6v6" />
+    </svg>
+  );
+}
+
+export function ClockIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    </svg>
+  );
+}
+
+export function MinusIcon({ size = 16, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+export function FlipHorizontalIcon({ size = 14, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M12 3v18" strokeDasharray="2 2" />
+      <path d="M17 7l3 5-3 5" />
+      <path d="M7 7l-3 5 3 5" />
+    </svg>
+  );
+}
+
 export function IconIndex({
   name,
   size,
@@ -437,6 +473,7 @@ export function IconIndex({
     mail: MailIcon,
     note: NoteIcon,
     upload: UploadIcon,
+    room: RoomIcon,
   };
   const Cmp = map[name] ?? HomeIcon;
   return <Cmp size={size} />;

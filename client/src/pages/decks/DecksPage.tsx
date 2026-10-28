@@ -10,7 +10,7 @@ import { primaryButton } from "../../lib/ui";
 
 export function DecksPage() {
   const { decks, isLoading, error, refetch, createDeck } = useDecks();
-  // Hero's "Create a deck" quick action / chat routing lands here with this
+  // The dashboard's "New deck" button lands here with this
   // flag set so the form is already open instead of making you click again.
   const location = useLocation();
   const [isCreating, setIsCreating] = useState(

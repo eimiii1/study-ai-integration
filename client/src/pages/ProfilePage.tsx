@@ -66,7 +66,7 @@ export function ProfilePage() {
                   {initial}
                 </span>
                 <div className="min-w-0">
-                  <h1 className="m-0 truncate text-[17px] font-semibold text-ink">
+                  <h1 className="font-display m-0 truncate text-[19px] font-medium text-ink">
                     {user.username ?? user.email}
                   </h1>
                   <button

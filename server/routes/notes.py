@@ -45,13 +45,13 @@ def get_notes(deck_id):
         for note in deck.notes
     ]), 200
 
-@notes_bp.route('<int:deck_id>/notes/<int:note_id>', methods=['PUT'])
+@notes_bp.route('<int:deck_id>/notes/<int:note_id>', methods=['GET'])
 @jwt_required()
 def get_note(deck_id, note_id):
     user_id = get_jwt_identity()
 
     deck = Deck.query.filter_by(id=deck_id, user_id=user_id).first()
-    if not Deck:
+    if not deck:
         return jsonify({'error' : 'Deck not found.'}), 404
 
     note = Note.query.filter_by(id=note_id, deck_id=deck.id).first()
@@ -64,7 +64,7 @@ def get_note(deck_id, note_id):
         'content' : note.content,
     }), 200
 
-notes_bp.route('<int:deck_id>/notes/<int:note_id>', methods=['PUT'])
+@notes_bp.route('<int:deck_id>/notes/<int:note_id>', methods=['PUT'])
 @jwt_required()
 def update_note(deck_id, note_id):
     user_id = get_jwt_identity()
@@ -82,7 +82,7 @@ def update_note(deck_id, note_id):
     content = data.get('content')
 
     if not title or not content:
-        return jsonify({'error' : 'Title and content are requierd.'}), 400
+        return jsonify({'error' : 'Title and content are required.'}), 400
 
     note.title = title 
     note.content = content

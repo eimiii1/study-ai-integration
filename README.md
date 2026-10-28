@@ -1,6 +1,6 @@
 # Study AI Integration
 
-Backend service for an AI-powered study platform. Built with Flask, it handles authentication, data management, and AI-powered quiz generation through the Gemini API.
+Backend service for an AI-powered study platform. Built with Flask, it handles authentication, data management, and AI-powered quiz generation through the Groq API.
 
 ## Documentation
 
@@ -14,4 +14,4 @@ Backend service for an AI-powered study platform. Built with Flask, it handles a
 - **Backend:** Flask, Flask-SQLAlchemy, Flask-JWT-Extended, Flask-CORS
 - **Database:** MySQL
 - **Frontend:** React (Vite)
-- **AI:** Gemini API
+- **AI:** Groq API

@@ -4,17 +4,6 @@ export interface NavItem {
   to: string;
 }
 
-export interface AgentTab {
-  name: string;
-  icon: string;
-  active?: boolean;
-}
-
-export interface QuickAction {
-  label: string;
-  icon: string;
-}
-
 export interface Deck {
   id: number;
   title: string;
@@ -22,22 +11,6 @@ export interface Deck {
   parent_deck_id: number | null;
   subdeck_count: number;
   card_count: number;
-}
-
-export interface DeckCard {
-  id: string;
-  avatarColors: string[];
-  title: string;
-  cardCount: number;
-}
-
-export interface ExploreDeck {
-  id: string;
-  name: string;
-  iconBg: string;
-  iconLetter: string;
-  description: string;
-  trending?: boolean;
 }
 
 export interface User {
@@ -65,10 +38,21 @@ export interface Note {
 }
 export type NoteInput = Pick<Note, "title" | "content">;
 
+export type QuestionType = "multiple_choice" | "identification" | "fill_in_blank";
+export type QuestionDifficulty = "easy" | "medium" | "hard";
+
 export interface QuizQuestion {
+  // The backend question id — needed to submit an answer for grading.
+  id: number;
+  type: QuestionType;
   question: string;
-  options: string[];
+  // null for identification/fill_in_blank — those are typed, not chosen.
+  options: string[] | null;
+  // Client-known answer, used only to pick an option's highlight color while
+  // waiting on the server response; the server's grading is what counts.
   answer: string;
+  explanation?: string;
+  difficulty?: QuestionDifficulty;
 }
 
 export interface Quiz {
@@ -83,4 +67,39 @@ export interface DeckOutletContext {
     description?: string,
     parentDeckId?: number,
   ) => Promise<Deck>;
+}
+
+export type FurnitureRarity = "common" | "rare" | "epic";
+
+export type PlacementZone = "floor" | "wall";
+export type WallSide = "left" | "right";
+
+export interface FurnitureItem {
+  id: number;
+  name: string;
+  kind: string;
+  rarity: FurnitureRarity;
+  image_url: string;
+  placement_zone: PlacementZone;
+}
+
+export interface InventoryItem extends FurnitureItem {
+  quantity: number;
+  placed: number;
+  available: number;
+}
+
+// x/y are GRID coordinates (see lib/roomGrid.ts), not pixels or percentages.
+// For a floor item, wall_side is null and x/y are the tile column/row.
+// For a wall item, wall_side says which back wall it's on and x is the slot
+// index along that wall (y is unused).
+export interface RoomItem extends FurnitureItem {
+  room_item_id: number;
+  furniture_id: number;
+  x: number;
+  y: number;
+  wall_side: WallSide | null;
+  z_index: number;
+  flipped: boolean;
+  scale: number;
 }

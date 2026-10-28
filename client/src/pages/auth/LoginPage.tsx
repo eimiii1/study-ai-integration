@@ -47,16 +47,16 @@ export function LoginPage() {
   return (
     <AuthLayout
       headline="Every deck you're studying, in one place."
-      eyebrow="Rune turns your notes into flashcards and quizzes — sign in to pick up where you left off."
+      eyebrow="Flashcards, notes and AI-generated quizzes for every subject — sign in to pick up where you left off."
     >
-      <h1 className="m-0 mb-1.5 text-[22px] font-medium text-ink">Welcome back</h1>
+      <h1 className="font-display m-0 mb-1.5 text-[23px] font-medium text-ink">Welcome back</h1>
       <p className="m-0 mb-7 text-[13px] text-ink-muted">Sign in to continue to Deckly.</p>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-5 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-ink-dim">Email</span>
-            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+            <span className="flex h-9.5 items-center gap-2 rounded-[6px] border-[1.5px] border-line-strong bg-input px-2.75 focus-within:border-ink focus-within:shadow-[2px_2px_0_0_var(--color-violet)]">
               <MailIcon size={15} className="text-ink-faint" />
               <input
                 type="text"
@@ -71,7 +71,7 @@ export function LoginPage() {
 
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-ink-dim">Password</span>
-            <span className="flex h-9.5 items-center gap-2 rounded-lg border border-line bg-input px-2.75 focus-within:border-violet">
+            <span className="flex h-9.5 items-center gap-2 rounded-[6px] border-[1.5px] border-line-strong bg-input px-2.75 focus-within:border-ink focus-within:shadow-[2px_2px_0_0_var(--color-violet)]">
               <LockIcon size={15} className="text-ink-faint" />
               <input
                 type={showPassword ? "text" : "password"}
@@ -118,7 +118,7 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-violet text-[13.5px] font-semibold text-app hover:bg-violet-strong disabled:opacity-60"
+          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-[6px] border-[1.5px] border-ink bg-violet text-[13.5px] font-semibold text-[#fbf8ee] shadow-[var(--shadow-sticker-sm)] hover:bg-violet-strong active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-60"
         >
           {isSubmitting && (
             <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-app/40 border-t-app" />
@@ -137,7 +137,7 @@ export function LoginPage() {
           type="button"
           disabled
           title="Not available yet"
-          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-faint opacity-60"
+          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-[6px] border-[1.5px] border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
         >
           Google
         </button>
@@ -145,7 +145,7 @@ export function LoginPage() {
           type="button"
           disabled
           title="Not available yet"
-          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-lg border border-line bg-panel text-[12.5px] text-ink-faint opacity-60"
+          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-[6px] border-[1.5px] border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
         >
           Microsoft
         </button>
