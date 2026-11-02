@@ -13,5 +13,5 @@ Backend service for an AI-powered study platform. Built with Flask, it handles a
 
 - **Backend:** Flask, Flask-SQLAlchemy, Flask-JWT-Extended, Flask-CORS
 - **Database:** MySQL
-- **Frontend:** React (Vite)
+- **Frontend:** React
 - **AI:** Groq API
