@@ -45,6 +45,11 @@
     # your Groq API key doesn't have access to the default model.
     GROQ_MODEL=openai/gpt-oss-20b
     ```
+
+    You can type random letters and characters for the secrets but it's a best practice to generate a secret key using:
+    ```bash
+    python -c 'import secrets; print(secrets.token_urlsafe(32))
+    ```
     
 6. Seed the furniture catalog (one-time, safe to re-run)
     
