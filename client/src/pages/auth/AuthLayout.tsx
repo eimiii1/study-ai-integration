@@ -19,9 +19,9 @@ export function AuthLayout({ eyebrow, headline, children }: AuthLayoutProps) {
 
         <div className="relative z-10 mb-10 flex items-center gap-2.5">
           <span className="flex h-7.5 w-7.5 items-center justify-center rounded-[6px] border-[1.5px] border-[#3a443c] bg-violet text-[15px] font-bold text-[#fbf8ee]">
-            D
+            B
           </span>
-          <span className="text-[11px] tracking-[0.02em] text-[#6c7467]">Deckly — your study desk</span>
+          <span className="text-[11px] tracking-[0.02em] text-[#6c7467]">BuildScape — your study desk</span>
         </div>
 
         <h2 className="font-display relative z-10 m-0 mb-3 max-w-85 text-[32px] font-medium leading-[1.2] text-[#f1efe2]">

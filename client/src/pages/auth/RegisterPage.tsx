@@ -68,7 +68,7 @@ export function RegisterPage() {
       eyebrow="Create an account to start building flashcard decks and AI-generated quizzes."
     >
       <h1 className="font-display m-0 mb-1.5 text-[23px] font-medium text-ink">Create your account</h1>
-      <p className="m-0 mb-7 text-[13px] text-ink-muted">Get started with Deckly for free.</p>
+      <p className="m-0 mb-7 text-[13px] text-ink-muted">Get started with BuildScape for free.</p>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-5 flex flex-col gap-4">

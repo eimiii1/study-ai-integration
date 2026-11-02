@@ -50,7 +50,7 @@ export function LoginPage() {
       eyebrow="Flashcards, notes and AI-generated quizzes for every subject — sign in to pick up where you left off."
     >
       <h1 className="font-display m-0 mb-1.5 text-[23px] font-medium text-ink">Welcome back</h1>
-      <p className="m-0 mb-7 text-[13px] text-ink-muted">Sign in to continue to Deckly.</p>
+      <p className="m-0 mb-7 text-[13px] text-ink-muted">Sign in to continue to BuildScape.</p>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-5 flex flex-col gap-4">
