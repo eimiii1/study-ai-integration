@@ -10,7 +10,7 @@ this one so the frontend can draw/snap to the same grid without an extra
 round trip per pointer move.
 """
 
-GRID_SIZE = 6  # floor is GRID_SIZE x GRID_SIZE tiles; each wall has GRID_SIZE slots
+GRID_SIZE = 6  
 
 
 def validate_zone(furniture, wall_side):

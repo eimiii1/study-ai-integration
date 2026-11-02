@@ -2,13 +2,9 @@ import random
 
 from models import db, Furniture, UserFurniture
 
-# Higher weight = more likely to drop. Doesn't need to sum to 100 — random.choices
-# just normalizes whatever's here, which also means adding a new rarity tier
-# later is a one-line change.
 RARITY_WEIGHTS = {'common': 60, 'rare': 30, 'epic': 10}
 
-# Chance a correct answer drops anything at all. Keeps rewards exciting
-# instead of a guaranteed "ding" on every question.
+
 AWARD_CHANCE = 0.5
 
 

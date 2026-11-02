@@ -7,8 +7,6 @@ Safe to re-run — it skips names that already exist instead of duplicating them
 from app import app
 from models import db, Furniture
 
-# Kinds that hang on a wall rather than sit on the floor. Everything else in
-# the catalog defaults to 'floor'.
 WALL_KINDS = {'frame', 'clock', 'corkboard', 'wire_board'}
 
 CATALOG = [
@@ -109,9 +107,7 @@ def seed():
             zone = 'wall' if item['kind'] in WALL_KINDS else 'floor'
             existing = by_name.get(item['name'])
             if existing:
-                # Self-healing: keep catalog rows in sync with this file
-                # (e.g. picks up placement_zone on a re-run after an update)
-                # instead of silently skipping them forever.
+                
                 changed = False
                 for field in ('kind', 'rarity', 'image_url'):
                     if getattr(existing, field) != item[field]:
