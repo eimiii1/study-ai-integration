@@ -4,9 +4,6 @@ import { accentFor } from "../lib/ui";
 import { DecksIcon } from "./icons";
 import type { Deck } from "../types";
 
-// An index card, not a SaaS content card: a colored tab punched out of the
-// top edge (like a filing tab) instead of a thin accent bar, a solid ink
-// border, and a flat offset shadow that the card settles onto on hover.
 export function DeckTile({ deck }: { deck: Deck }) {
   const isSubdeck = deck.parent_deck_id !== null;
   const accent = accentFor(deck.id);

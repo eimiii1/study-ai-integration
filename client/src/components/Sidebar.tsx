@@ -5,9 +5,6 @@ import { clearToken } from "../lib/api";
 import { accentFor } from "../lib/ui";
 import { IconIndex, LogOutIcon, SearchIcon } from "./icons";
 
-// The sidebar is the dark "spine" of the notebook — a fixed rail with its
-// own ink/rail color scale, distinct from the paper-toned content area it
-// sits beside, rather than one flat surface stretched across the screen.
 export function Sidebar() {
   const { user, isLoading } = useCurrentUser();
   const navigate = useNavigate();

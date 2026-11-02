@@ -18,8 +18,6 @@ interface InlineFormProps {
   onCancel: () => void;
 }
 
-// One small form used for decks, subdecks, flashcards and notes (create + edit).
-// The caller closes it by unmounting after onSubmit resolves.
 export function InlineForm({
   fields,
   initialValues = {},

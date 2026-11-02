@@ -34,10 +34,7 @@ const RARITY_STYLE: Record<string, { border: string; glow: string; text: string;
   epic: { border: "border-violet/65", glow: "shadow-[0_0_16px_-2px_rgba(182,81,47,0.4)]", text: "text-violet", rgb: "182,81,47" },
 };
 
-const ITEM_BOX = 150; // image-pixel box a placed item's art is fit into
-
-// A target the ghost/cursor can snap to: a floor tile, or a slot on one of
-// the two back walls.
+const ITEM_BOX = 150;
 type GridTarget = { x: number; y: number; wallSide: WallSide | null };
 
 function occupiedKey(x: number, y: number, wallSide: WallSide | null) {

@@ -21,7 +21,6 @@ import { RoomPage } from "./pages/RoomPage";
 import { useState } from "react";
 import { LoadingScreen } from "./components/LoadingScreen";
 
-// Layout route: signed-in users get the sidebar shell, everyone else goes to /login.
 function ProtectedRoute() {
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
@@ -29,8 +28,6 @@ function ProtectedRoute() {
   return <AppLayout />;
 }
 
-// The room is a full-screen game view with no sidebar chrome, but still
-// requires auth — same check as ProtectedRoute, just without the shell.
 function RequireAuth({ children }: { children: ReactNode }) {
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;

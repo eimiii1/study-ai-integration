@@ -13,12 +13,6 @@ type UseDeckItemsResult<T, I> = {
   remove: (id: number) => Promise<void>;
 };
 
-/**
- * Flashcards and notes share the exact same CRUD shape under
- * /api/decks/<deck_id>/<resource>, so one hook serves both.
- * Mutations throw on failure so forms can show the error; after each one we
- * re-sync from the server so the list always matches what's saved.
- */
 export function useDeckItems<T extends { id: number }, I>(
   deckId: number,
   resource: Resource,
@@ -31,7 +25,6 @@ export function useDeckItems<T extends { id: number }, I>(
 
   const [fetchKey, setFetchKey] = useState(0);
 
-  // Re-sync after mutations without flashing a spinner (event handlers only).
   const sync = useCallback(async () => {
     try {
       setItems(await apiFetch(base));

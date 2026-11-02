@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-// A brief boot splash shown once when the app first mounts, not a generic
-// spinner reused everywhere — matches the paper/sticker theme (ink-bordered
-// badge, serif wordmark, three dots pulsing like the HUD toast on My Room).
 export function LoadingScreen({ onDone }: { onDone?: () => void }) {
   const [leaving, setLeaving] = useState(false);
 

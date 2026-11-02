@@ -5,7 +5,6 @@ interface PageHeaderProps {
   children?: ReactNode;
 }
 
-// The page-level title bar used by every non-dashboard page.
 export function PageHeader({ title, children }: PageHeaderProps) {
   return (
     <div className="flex h-[46px] flex-shrink-0 items-center justify-between gap-3 border-b-[1.5px] border-ink bg-app px-6">

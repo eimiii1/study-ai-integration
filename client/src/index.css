@@ -6,8 +6,7 @@
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
-  /* Surfaces — a bound notebook: pale stone "page" content against an ink
-     "spine" rail, not one flat tone stretched across the whole screen. */
+
   --color-app: #f4f2e9;
   --color-sidebar: #1d2420;
   --color-panel: #ffffff;
@@ -15,28 +14,23 @@
   --color-elevated: #ebe7d8;
   --color-input: #ffffff;
 
-  /* Borders — warm stone, tinted toward the page, not neutral grey */
+
   --color-hairline: #e6e1cf;
   --color-line: #ddd7bf;
   --color-line-strong: #c7bfa0;
 
-  /* Text — ink on paper, never pure black */
+
   --color-ink: #23271f;
   --color-ink-dim: #4d5244;
   --color-ink-muted: #71735f;
   --color-ink-faint: #9a977d;
 
-  /* Text on the dark sidebar rail — a separate scale, not a dimmed version
-     of the paper-ink scale above. */
+
   --color-rail-ink: #f1efe2;
   --color-rail-dim: #aab0a2;
   --color-rail-faint: #6c7467;
   --color-rail-line: #2c342e;
 
-  /* Accents — brick clay (primary), moss (secondary), ochre + berry + ink-
-     blue + olive for per-deck variety. Token names kept from the previous
-     pass so utilities cascade, but every value below is a new, unrelated
-     color choice, not a retint of the old amber/teal set. */
   --color-violet: #b6512f;
   --color-violet-strong: #9c4226;
   --color-pink: #9c3f5c;
@@ -47,9 +41,6 @@
   --color-danger: #a93a2c;
   --color-gold: #b8862f;
 
-  /* Shadows — two families: a soft lift for floating chrome (menus,
-     toolbars) and a hard "sticker" offset for cards, the signature shape
-     device of this pass. */
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.1), 0 8px 20px -8px rgba(0, 0, 0, 0.18);
   --shadow-lift: 0 4px 10px -2px rgba(0, 0, 0, 0.18), 0 14px 32px -12px rgba(0, 0, 0, 0.28);
   --shadow-sticker: 3px 3px 0 0 var(--color-ink);
@@ -85,16 +76,11 @@ body {
   font-family: var(--font-mono);
 }
 
-/* The hard-edged "sticker" card: solid ink border + offset block shadow
-   instead of a soft blurred one. Used for anything meant to read as a
-   physical card on the page rather than a floating panel. */
 .card-sticker {
   border: 1.5px solid var(--color-ink);
   box-shadow: var(--shadow-sticker);
 }
 
-/* Smooth, consistent motion on every interactive element without having to
-   repeat "transition-colors" in every className. */
 button,
 a,
 input,
@@ -118,7 +104,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Visible, on-brand keyboard focus instead of the browser default outline. */
 :focus-visible {
   outline: 2px solid var(--color-violet);
   outline-offset: 2px;

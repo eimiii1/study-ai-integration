@@ -18,10 +18,6 @@ const todayLabel = new Date().toLocaleDateString(undefined, {
   day: "numeric",
 });
 
-// The homepage, reworked as a plain dashboard: a greeting, a few honest
-// stats pulled straight from the decks you actually have, and three quick
-// jumps into the three things this app does — no chat, no AI assistant
-// chrome, nothing you have to type into.
 export function DashboardHero({ decks }: { decks: Deck[] }) {
   const { user } = useCurrentUser();
   const navigate = useNavigate();

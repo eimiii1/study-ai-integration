@@ -23,8 +23,6 @@ export const useDecks = (): UseDecksResult => {
 
   const [fetchKey, setFetchKey] = useState(0);
 
-  // Used after mutations to re-sync with the server (fresh card/subdeck counts)
-  // without flashing a spinner. Only ever called from event handlers.
   const sync = useCallback(async () => {
     try {
       setDecks(await apiFetch("/api/decks"));
@@ -91,8 +89,6 @@ export const useDecks = (): UseDecksResult => {
     [sync],
   );
 
-  // No local state update here on purpose: the caller navigates away right
-  // after, and every page that lists decks refetches when it mounts.
   const deleteDeck = useCallback(async (id: number) => {
     await apiFetch(`/api/decks/${id}`, { method: "DELETE" });
   }, []);

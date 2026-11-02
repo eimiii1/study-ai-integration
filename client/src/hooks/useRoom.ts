@@ -77,8 +77,6 @@ export function useRoom(): UseRoomResult {
 
   const refetch = useCallback(() => setFetchKey((k) => k + 1), []);
 
-  // Returns true on success, false if the backend rejected the spot (wrong
-  // zone, out of bounds, or already occupied) — the caller shows placeError.
   const placeItem = useCallback(
     async (furnitureId: number, x: number, y: number, wallSide: WallSide | null) => {
       try {
@@ -132,7 +130,7 @@ export function useRoom(): UseRoomResult {
         items.map((i) => (i.room_item_id === roomItemId ? { ...i, flipped: !next } : i)),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [roomItems]);
 
   const setScale = useCallback(async (roomItemId: number, scale: number) => {
