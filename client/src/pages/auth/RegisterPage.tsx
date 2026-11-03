@@ -164,24 +164,6 @@ export function RegisterPage() {
         <span className="text-[11.5px] text-ink-faint">or continue with</span>
       </div>
 
-      <div className="mb-8 flex gap-2.5">
-        <button
-          type="button"
-          disabled
-          title="Not available yet"
-          className="flex h-10.5 flex-1 cursor-not-allowed items-center justify-center rounded-[10px] border border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
-        >
-          Google
-        </button>
-        <button
-          type="button"
-          disabled
-          title="Not available yet"
-          className="flex h-10.5 flex-1 cursor-not-allowed items-center justify-center rounded-[10px] border border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
-        >
-          Microsoft
-        </button>
-      </div>
 
       <p className="m-0 text-center text-[12.5px] text-ink-muted">
         Already have an account?{" "}
