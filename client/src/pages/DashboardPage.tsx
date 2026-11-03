@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="px-7 pt-6">
+      <div className="px-7 pt-6 mb-10">
         <ChatPanel />
       </div>
       <DashboardHero decks={decks} />

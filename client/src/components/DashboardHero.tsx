@@ -29,7 +29,7 @@ export function DashboardHero({ decks }: { decks: Deck[] }) {
   const firstDeckId = decks[0]?.id;
 
   return (
-    <section className="border-b border-hairline bg-panel px-7 pb-6 pt-8">
+    <section className="border-b border-hairline bg-panel px-7 pb-6 pt-8 mb-10">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-mono m-0 text-[10.5px] tracking-[0.04em] text-ink-faint">{todayLabel}</p>

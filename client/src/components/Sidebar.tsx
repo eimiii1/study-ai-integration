@@ -18,7 +18,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="flex h-full w-52 flex-shrink-0 flex-col border-r border-rail-line bg-sidebar p-3">
+    <aside className="flex h-full w-52 flex-shrink-0 flex-col border-0 border-rail-line bg-sidebar p-3">
       <button
         onClick={() => navigate("/")}
         className="mb-5 flex items-center gap-2 rounded-[8px] px-1.5 py-1 text-left hover:bg-[#1e1c16]"
@@ -35,10 +35,10 @@ export function Sidebar() {
                 to={item.to}
                 end={item.to === "/"}
                 className={({ isActive }) =>
-                  "flex items-center gap-2 rounded-[8px] border px-2 py-1.75 text-[12.5px] no-underline " +
+                  "flex items-center gap-2 rounded-[8px] border-0 px-2 py-1.75 text-[12.5px] no-underline " +
                   (isActive
-                    ? "border-rail-line bg-[#201e18] font-medium text-rail-ink"
-                    : "border-transparent text-rail-dim hover:border-rail-line hover:bg-[#1c1a15] hover:text-rail-ink")
+                    ? "border-rail-line bg-[#1d1d1d] font-medium text-rail-ink"
+                    : "border-transparent text-rail-dim hover:border-rail-line hover:bg-[#1d1d1d] hover:text-rail-ink")
                 }
               >
                 <span className="flex opacity-90">
