@@ -50,11 +50,44 @@ function normalizeQuestion(raw: unknown): QuizQuestion | null {
   return { id, type, question, options, answer, explanation, difficulty };
 }
 
+// Mirrors server/utils/text_match.py's is_close_enough — kept in sync so the
+// local fallback (used only if the grading request itself fails) and the
+// instant on-screen feedback agree with how the server actually grades it.
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0;
+  if (!a) return b.length;
+  if (!b) return a.length;
+
+  let previousRow = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const currentRow = [i];
+    for (let j = 1; j <= b.length; j++) {
+      const insertCost = currentRow[j - 1] + 1;
+      const deleteCost = previousRow[j] + 1;
+      const substituteCost = previousRow[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1);
+      currentRow.push(Math.min(insertCost, deleteCost, substituteCost));
+    }
+    previousRow = currentRow;
+  }
+  return previousRow[b.length];
+}
+
+function isCloseEnough(given: string, correct: string): boolean {
+  const g = given.trim().toLowerCase();
+  const c = correct.trim().toLowerCase();
+  if (!g || !c) return g === c;
+  if (g === c) return true;
+
+  const threshold = Math.max(1, Math.round(c.length * 0.2));
+  return levenshtein(g, c) <= threshold;
+}
+
 function checkAnswer(question: QuizQuestion, given: string | null): boolean {
   if (given === null) return false;
   if (question.type === "multiple_choice") return given === question.answer;
-  // Typed answers: forgive case and surrounding whitespace.
-  return given.trim().toLowerCase() === question.answer.trim().toLowerCase();
+  // Typed answers: forgive case, whitespace, and a small typo — same
+  // tolerance the server applies when it grades the real answer.
+  return isCloseEnough(given, question.answer);
 }
 
 type AwardedItem = { name: string; rarity: FurnitureRarity; image_url: string };
@@ -72,11 +105,19 @@ export function StudyTab() {
   const location = useLocation();
   const autoStartedRef = useRef(false);
 
-  const startQuiz = async () => {
-    setIsLoading(true);
-    setError(null);
+  // Shared by both the first-load ("Start quiz") and regenerate flows — the
+  // only difference is which loading/error state pair reports back, since a
+  // regenerate failure shouldn't blank out the quiz currently on screen.
+  const fetchQuiz = async (
+    regenerate: boolean,
+    setBusy: (v: boolean) => void,
+    setFailure: (v: string | null) => void,
+  ) => {
+    setBusy(true);
+    setFailure(null);
     try {
-      const data = await apiFetch(`/api/decks/${deck.id}/study`);
+      const path = regenerate ? `/api/decks/${deck.id}/study?regenerate=true` : `/api/decks/${deck.id}/study`;
+      const data = await apiFetch(path);
       if (!Array.isArray(data?.questions)) {
         throw new Error("The quiz came back in an unexpected format.");
       }
@@ -93,11 +134,13 @@ export function StudyTab() {
 
       setQuiz({ questions });
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load the quiz.");
+      setFailure(err instanceof Error ? err.message : "Failed to load the quiz.");
     } finally {
-      setIsLoading(false);
+      setBusy(false);
     }
   };
+
+  const startQuiz = () => fetchQuiz(false, setIsLoading, setError);
 
   useEffect(() => {
     const wantsAutoStart = Boolean(
@@ -110,8 +153,22 @@ export function StudyTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state]);
 
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [regenerateError, setRegenerateError] = useState<string | null>(null);
+  const regenerateQuiz = () => fetchQuiz(true, setIsRegenerating, setRegenerateError);
+
   if (quiz) {
-    return <QuizRunner key={deck.id} quiz={quiz} deckId={deck.id} onExit={() => setQuiz(null)} />;
+    return (
+      <QuizRunner
+        key={deck.id}
+        quiz={quiz}
+        deckId={deck.id}
+        onExit={() => setQuiz(null)}
+        onRegenerate={regenerateQuiz}
+        isRegenerating={isRegenerating}
+        regenerateError={regenerateError}
+      />
+    );
   }
 
   return (
@@ -166,7 +223,21 @@ function DifficultyBadge({ difficulty }: { difficulty?: QuestionDifficulty }) {
   );
 }
 
-function QuizRunner({ quiz, deckId, onExit }: { quiz: Quiz; deckId: number; onExit: () => void }) {
+function QuizRunner({
+  quiz,
+  deckId,
+  onExit,
+  onRegenerate,
+  isRegenerating,
+  regenerateError,
+}: {
+  quiz: Quiz;
+  deckId: number;
+  onExit: () => void;
+  onRegenerate: () => void;
+  isRegenerating: boolean;
+  regenerateError: string | null;
+}) {
   const { questions } = quiz;
 
   const [index, setIndex] = useState(0);
@@ -180,6 +251,10 @@ function QuizRunner({ quiz, deckId, onExit }: { quiz: Quiz; deckId: number; onEx
   const [showReview, setShowReview] = useState(false);
   const [isGrading, setIsGrading] = useState(false);
   const [awardedItem, setAwardedItem] = useState<AwardedItem | null>(null);
+  // The actual verdict the grading request returned, so the feedback shown
+  // after answering always matches what was graded/scored — never a second,
+  // separately-recomputed check that could disagree with it.
+  const [lastCorrect, setLastCorrect] = useState(false);
 
   const question = questions[index];
   const isDone = index >= questions.length;
@@ -244,6 +319,7 @@ function QuizRunner({ quiz, deckId, onExit }: { quiz: Quiz; deckId: number; onEx
     setTimedOut(isTimeout);
     setPhase("revealed");
     setIsGrading(false);
+    setLastCorrect(correct);
     if (correct) setScore((s) => s + 1);
     if (awarded) setAwardedItem(awarded);
     setHistory((h) => [...h, { question, userAnswer: given, isCorrect: correct, timedOut: isTimeout }]);
@@ -323,6 +399,11 @@ function QuizRunner({ quiz, deckId, onExit }: { quiz: Quiz; deckId: number; onEx
         <p className="m-0 mb-4 text-[12.5px] text-ink-muted">
           {pct}% — {grade}
         </p>
+        {regenerateError && (
+          <div className="mb-3">
+            <ErrorNotice message={regenerateError} />
+          </div>
+        )}
         <div className="flex items-center gap-1.5">
           <button
             className={primaryButton}
@@ -336,6 +417,9 @@ function QuizRunner({ quiz, deckId, onExit }: { quiz: Quiz; deckId: number; onEx
           </button>
           <button className={secondaryButton} onClick={() => setShowReview(true)}>
             Review answers
+          </button>
+          <button className={secondaryButton} onClick={onRegenerate} disabled={isRegenerating}>
+            {isRegenerating ? "Regenerating..." : "Regenerate quiz"}
           </button>
           <button
             className="rounded-[6px] px-2.5 py-1.5 text-[12px] text-ink-dim hover:bg-elevated hover:text-ink"
@@ -432,14 +516,12 @@ function QuizRunner({ quiz, deckId, onExit }: { quiz: Quiz; deckId: number; onEx
             <div
               className={
                 "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[12.5px] " +
-                (checkAnswer(question, userAnswer)
-                  ? "border-green bg-green/10 text-green"
-                  : "border-danger bg-danger/10 text-danger")
+                (lastCorrect ? "border-green bg-green/10 text-green" : "border-danger bg-danger/10 text-danger")
               }
             >
-              {checkAnswer(question, userAnswer) ? <CheckIcon size={14} /> : <XIcon size={14} />}
+              {lastCorrect ? <CheckIcon size={14} /> : <XIcon size={14} />}
               <span>
-                {checkAnswer(question, userAnswer)
+                {lastCorrect
                   ? "Correct"
                   : `${timedOut ? "Time's up — " : ""}Correct answer: ${question.answer}`}
               </span>

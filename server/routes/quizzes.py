@@ -3,10 +3,11 @@ import traceback
 from flask import Blueprint, jsonify, current_app, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.exc import SQLAlchemyError
-from groq import Groq
 from models import db, Deck, Quiz, Question
 from utils.quiz_prompts import build_quiz_prompt
 from utils.rewards import maybe_award_furniture
+from utils.groq_helpers import create_completion, groq_error_message, is_retryable_generation_failure
+from utils.text_match import is_close_enough
 
 quizzes_bp = Blueprint('quizzes', __name__, url_prefix='/api/decks')
 
@@ -45,7 +46,16 @@ def study_deck(deck_id):
     if not deck:
         return jsonify({'error': 'Deck not found.'}), 404
 
+    # ?regenerate=true drops the cached quiz and makes a fresh one below,
+    # instead of only regenerating when a flashcard actually changes.
+    regenerate = request.args.get('regenerate', '').lower() in ('1', 'true', 'yes')
+
     existing_quiz = Quiz.query.filter_by(deck_id=deck.id).first()
+    if existing_quiz and regenerate:
+        db.session.delete(existing_quiz)
+        db.session.commit()
+        existing_quiz = None
+
     if existing_quiz:
         return jsonify(_serialize_quiz(existing_quiz)), 200
 
@@ -55,28 +65,26 @@ def study_deck(deck_id):
 
     prompt = build_quiz_prompt(flashcards)
 
+    model = current_app.config['GROQ_MODEL']
+    messages = [{'role': 'user', 'content': prompt}]
+
     try:
-        client = Groq(api_key=current_app.config['GROQ_API_KEY'])
-        completion = client.chat.completions.create(
-            model=current_app.config['GROQ_MODEL'],
-            messages=[{'role': 'user', 'content': prompt}],
-            response_format={'type': 'json_object'},
-        )
+        try:
+            completion = create_completion(model, messages, max_tokens=6000, json_mode=True)
+        except Exception as e:
+            # 'gpt-oss' reasoning models occasionally burn their whole output
+            # budget on hidden reasoning and emit nothing — worth one
+            # automatic retry before bothering the user with it.
+            if not is_retryable_generation_failure(e):
+                raise
+            completion = create_completion(model, messages, max_tokens=6000, json_mode=True)
         raw_text = completion.choices[0].message.content
     except Exception as e:
         # Network error, bad/missing API key, invalid model name, rate limit, etc.
         # Printed so it shows up in the Flask console (debug=True) instead of
         # just a bare 500 in the browser with no clue what happened.
         traceback.print_exc()
-        message = 'Could not reach the AI service. Check the server console for details.'
-        if '429' in str(e) or 'rate_limit' in str(e).lower():
-            message = "Hit Groq's rate limit — wait a bit and try again."
-        elif '404' in str(e) or 'model_not_found' in str(e).lower():
-            message = (
-                f"Groq model '{current_app.config['GROQ_MODEL']}' isn't available on this "
-                "API key. Set GROQ_MODEL in .env to a model your key can access."
-            )
-        return jsonify({'error': message}), 500
+        return jsonify({'error': groq_error_message(e)}), 500
 
     try:
         parsed = _extract_json(raw_text)
@@ -130,8 +138,9 @@ def _is_correct(question, given):
     correct = question.correct_answer[0] if isinstance(question.correct_answer, list) else question.correct_answer
     if question.question_type == 'multiple_choice':
         return given == correct
-    # Typed answers: forgive case and surrounding whitespace.
-    return str(given).strip().lower() == str(correct).strip().lower()
+    # Typed answers: forgive case, surrounding whitespace, and a small typo
+    # (one missed/extra/swapped letter) instead of demanding an exact match.
+    return is_close_enough(str(given), str(correct))
 
 
 # Grading happens here, server-side, instead of trusting whatever the client

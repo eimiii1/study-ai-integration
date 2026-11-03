@@ -10,6 +10,9 @@ class Config:
     GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
     GROQ_MODEL = os.environ.get('GROQ_MODEL', 'openai/gpt-oss-20b')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False 
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=24)
+
+    # Caps PDF uploads to the quiz chatbot (routes/chatbot.py).
+    MAX_CONTENT_LENGTH = 15 * 1024 * 1024

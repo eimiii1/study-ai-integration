@@ -52,6 +52,17 @@ export interface Quiz {
   questions: QuizQuestion[];
 }
 
+export type ChatMessage =
+  | { id: string; role: "user"; kind: "text"; text: string }
+  | { id: string; role: "user"; kind: "file"; fileName: string }
+  | { id: string; role: "bot"; kind: "pending"; text: string }
+  | { id: string; role: "bot"; kind: "text"; text: string }
+  | { id: string; role: "bot"; kind: "error"; text: string }
+  // The PDF became a real deck of flashcards — studying it (and any
+  // furniture rewards) goes through the normal deck quiz flow, not a
+  // chatbot-specific one.
+  | { id: string; role: "bot"; kind: "deck"; deckId: number; title: string; cardCount: number };
+
 export interface DeckOutletContext {
   deck: Deck;
   subdecks: Deck[];

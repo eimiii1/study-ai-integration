@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from config import Config
 from models import db
 from routes.auth import auth_bp
@@ -7,6 +7,7 @@ from routes.flashcards import flashcards_bp
 from routes.notes import notes_bp
 from routes.quizzes import quizzes_bp
 from routes.furniture import furniture_bp
+from routes.chatbot import chatbot_bp
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
@@ -22,8 +23,15 @@ app.register_blueprint(flashcards_bp)
 app.register_blueprint(notes_bp)
 app.register_blueprint(quizzes_bp)
 app.register_blueprint(furniture_bp)
+app.register_blueprint(chatbot_bp)
 
 jwt = JWTManager(app)
+
+# Raised by the chatbot's PDF upload (Config.MAX_CONTENT_LENGTH) when a file
+# is too large — without this, Flask would just return a bare, unhelpful 413.
+@app.errorhandler(413)
+def file_too_large(e):
+    return jsonify({'error': 'That file is too large. The limit is 15MB.'}), 413
 
 @app.route('/')
 def home():

@@ -457,6 +457,18 @@ export function FlipHorizontalIcon({ size = 14, ...rest }: IconProps) {
   );
 }
 
+export function ChatbotIcon({ size = 16, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <path d="M12 8V5M9.5 4.5h5" />
+      <rect x="5" y="8" width="14" height="10" rx="3" />
+      <circle cx="9.5" cy="13" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="14.5" cy="13" r="1.1" fill="currentColor" stroke="none" />
+      <path d="M3 12.5h2M19 12.5h2" />
+    </svg>
+  );
+}
+
 export function IconIndex({
   name,
   size,
@@ -474,6 +486,7 @@ export function IconIndex({
     note: NoteIcon,
     upload: UploadIcon,
     room: RoomIcon,
+    chatbot: ChatbotIcon,
   };
   const Cmp = map[name] ?? HomeIcon;
   return <Cmp size={size} />;
