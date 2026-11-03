@@ -15,9 +15,9 @@ export function DeckPreviewGrid({ decks, isLoading, error, refetch }: DeckPrevie
 
   return (
     <section className="px-7 pb-10">
-      <div className="mb-3.5 flex items-end justify-between border-b-[1.5px] border-ink pb-2">
-        <h2 className="font-display m-0 text-[17px] font-medium italic text-ink">
-          Your decks <span className="font-sans text-[13px] not-italic font-normal text-ink-faint">({topLevelDecks.length})</span>
+      <div className="mb-3.5 flex items-end justify-between border-b border-hairline pb-2">
+        <h2 className="font-display m-0 text-[17px] font-medium text-ink">
+          Your decks <span className="font-sans text-[13px] font-normal text-ink-faint">({topLevelDecks.length})</span>
         </h2>
         <div className="flex items-center gap-1">
           <button
@@ -43,14 +43,14 @@ export function DeckPreviewGrid({ decks, isLoading, error, refetch }: DeckPrevie
         <div>
           <p className="mb-2 text-[12px] text-danger">{error}</p>
           <button
-            className="rounded-[6px] border-[1.5px] border-line-strong px-2 py-1 text-[12px] text-ink-dim hover:border-ink hover:text-ink"
+            className="rounded-[8px] border border-line-strong px-2 py-1 text-[12px] text-ink-dim hover:border-ink hover:text-ink"
             onClick={() => refetch()}
           >
             Try again
           </button>
         </div>
       ) : topLevelDecks.length === 0 ? (
-        <div className="rounded-[8px] border-[1.5px] border-dashed border-line-strong px-5 py-7 text-center">
+        <div className="rounded-[14px] border border-dashed border-line-strong px-5 py-7 text-center">
           <p className="m-0 text-[12.5px] text-ink-muted">
             No decks yet —{" "}
             <Link to="/decks" className="font-medium text-ink underline decoration-line-strong underline-offset-2">

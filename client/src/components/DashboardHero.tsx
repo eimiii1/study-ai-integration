@@ -29,11 +29,11 @@ export function DashboardHero({ decks }: { decks: Deck[] }) {
   const firstDeckId = decks[0]?.id;
 
   return (
-    <section className="border-b-[1.5px] border-ink bg-panel px-7 pb-6 pt-8">
+    <section className="border-b border-hairline bg-panel px-7 pb-6 pt-8">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-mono m-0 text-[10.5px] tracking-[0.04em] text-ink-faint">{todayLabel}</p>
-          <h1 className="font-display m-0 mt-1 text-[30px] font-medium italic leading-tight text-ink">
+          <h1 className="font-display m-0 mt-1 text-[30px] font-medium leading-tight text-ink">
             {user ? `${timeOfDayGreeting()}, ${user.username}.` : `${timeOfDayGreeting()}.`}
           </h1>
         </div>
@@ -41,14 +41,14 @@ export function DashboardHero({ decks }: { decks: Deck[] }) {
         <div className="flex gap-2">
           <button
             onClick={() => navigate("/decks", { state: { openCreate: true } })}
-            className="flex items-center gap-1.5 rounded-[6px] border-[1.5px] border-ink bg-violet px-3.5 py-2 text-[12.5px] font-semibold text-[#fbf8ee] shadow-[var(--shadow-sticker-sm)] hover:bg-violet-strong active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+            className="flex items-center gap-1.5 rounded-[10px] bg-ink px-3.5 py-2 text-[12.5px] font-semibold text-app shadow-[var(--shadow-soft)] hover:bg-ink-dim active:opacity-85"
           >
             New deck
           </button>
           <button
             onClick={() => firstDeckId && navigate(`/decks/${firstDeckId}/study`, { state: { autoStart: true } })}
             disabled={!firstDeckId}
-            className="flex items-center gap-1.5 rounded-[6px] border-[1.5px] border-line-strong bg-panel px-3.5 py-2 text-[12.5px] font-medium text-ink-dim hover:border-ink hover:text-ink disabled:cursor-not-allowed disabled:opacity-45"
+            className="flex items-center gap-1.5 rounded-[10px] border border-line-strong bg-panel px-3.5 py-2 text-[12.5px] font-medium text-ink-dim hover:border-ink hover:text-ink disabled:cursor-not-allowed disabled:opacity-45"
           >
             Study now
           </button>
@@ -60,17 +60,17 @@ export function DashboardHero({ decks }: { decks: Deck[] }) {
         <StatTile icon={<CardIcon size={15} />} label="Flashcards" value={cardCount} accent="teal" />
         <button
           onClick={() => navigate("/room")}
-          className="group relative flex items-center justify-between gap-2 overflow-hidden rounded-[8px] border-[1.5px] border-ink bg-orange/12 px-4 py-3.5 text-left shadow-[var(--shadow-sticker)] transition-transform hover:-translate-y-[1px]"
+          className="group relative flex items-center justify-between gap-2 overflow-hidden rounded-[14px] border border-line bg-orange/10 px-4 py-3.5 text-left shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-[1px]"
         >
           <span>
             <span className="mb-0.5 flex items-center gap-1.5 text-[11px] text-ink-muted">
               <RoomIcon size={13} />
               My Room
             </span>
-            <span className="font-display text-[14px] italic text-ink">See your furniture</span>
+            <span className="font-display text-[14px] text-ink">See your furniture</span>
           </span>
           <span
-            className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-[1.5px] border-ink text-[13px] text-ink transition-transform group-hover:translate-x-0.5"
+            className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-[13px] text-app transition-transform group-hover:translate-x-0.5"
             style={{ background: "var(--color-orange)" }}
           >
             ›
@@ -99,7 +99,7 @@ function StatTile({
   accent: string;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-[8px] border-[1.5px] border-ink bg-elevated px-4 py-3.5 shadow-[var(--shadow-sticker)]">
+    <div className="flex items-center justify-between rounded-[14px] border border-line bg-elevated px-4 py-3.5 shadow-[var(--shadow-soft)]">
       <div>
         <p className="m-0 flex items-center gap-1.5 text-[11px] text-ink-muted">
           <span style={{ color: `var(--color-${accent})` }}>{icon}</span>

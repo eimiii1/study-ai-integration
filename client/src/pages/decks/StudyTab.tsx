@@ -14,9 +14,11 @@ import type {
 
 const QUESTION_SECONDS = 25;
 
-// The backend sends question_type / question_text / choices / correct_answer
-// (and correct_answer is itself a one-item array), so normalize that into the
-// shape the rest of this file uses. Falls back gracefully on older shapes too.
+// The backend sends question_type / question_text / choices — deliberately
+// no correct_answer here (see types.ts and server/routes/quizzes.py): that
+// only comes back from the grading request once the question's answered, so
+// it's never sitting in this payload for anyone to read out of the network
+// tab before they've actually answered.
 function normalizeQuestion(raw: unknown): QuizQuestion | null {
   if (!raw || typeof raw !== "object") return null;
   const q = raw as Record<string, unknown>;
@@ -30,67 +32,27 @@ function normalizeQuestion(raw: unknown): QuizQuestion | null {
   ) as QuizQuestion["type"];
 
   const question = q.question_text ?? q.question ?? q.prompt ?? q.text;
-  const rawAnswer = q.answer ?? q.correct_answer ?? q.correctAnswer;
-  const answer = Array.isArray(rawAnswer) ? rawAnswer[0] : rawAnswer;
 
   const rawOptions = q.choices ?? q.options ?? q.answers;
   const options = Array.isArray(rawOptions)
     ? rawOptions.filter((o): o is string => typeof o === "string")
     : null;
 
-  const explanation = typeof q.explanation === "string" ? q.explanation : undefined;
   const difficulty: QuestionDifficulty | undefined =
     q.difficulty === "easy" || q.difficulty === "medium" || q.difficulty === "hard"
       ? q.difficulty
       : undefined;
 
-  if (!Number.isFinite(id) || typeof question !== "string" || typeof answer !== "string") return null;
+  if (!Number.isFinite(id) || typeof question !== "string") return null;
   if (type === "multiple_choice" && (!options || options.length === 0)) return null;
 
-  return { id, type, question, options, answer, explanation, difficulty };
-}
-
-// Mirrors server/utils/text_match.py's is_close_enough — kept in sync so the
-// local fallback (used only if the grading request itself fails) and the
-// instant on-screen feedback agree with how the server actually grades it.
-function levenshtein(a: string, b: string): number {
-  if (a === b) return 0;
-  if (!a) return b.length;
-  if (!b) return a.length;
-
-  let previousRow = Array.from({ length: b.length + 1 }, (_, j) => j);
-  for (let i = 1; i <= a.length; i++) {
-    const currentRow = [i];
-    for (let j = 1; j <= b.length; j++) {
-      const insertCost = currentRow[j - 1] + 1;
-      const deleteCost = previousRow[j] + 1;
-      const substituteCost = previousRow[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1);
-      currentRow.push(Math.min(insertCost, deleteCost, substituteCost));
-    }
-    previousRow = currentRow;
-  }
-  return previousRow[b.length];
-}
-
-function isCloseEnough(given: string, correct: string): boolean {
-  const g = given.trim().toLowerCase();
-  const c = correct.trim().toLowerCase();
-  if (!g || !c) return g === c;
-  if (g === c) return true;
-
-  const threshold = Math.max(1, Math.round(c.length * 0.2));
-  return levenshtein(g, c) <= threshold;
-}
-
-function checkAnswer(question: QuizQuestion, given: string | null): boolean {
-  if (given === null) return false;
-  if (question.type === "multiple_choice") return given === question.answer;
-  // Typed answers: forgive case, whitespace, and a small typo — same
-  // tolerance the server applies when it grades the real answer.
-  return isCloseEnough(given, question.answer);
+  return { id, type, question, options, difficulty };
 }
 
 type AwardedItem = { name: string; rarity: FurnitureRarity; image_url: string };
+// What the grading request reveals once a question's been answered — the
+// only place the correct answer exists on the client, and only after.
+type Revealed = { answer: string; explanation?: string };
 
 export function StudyTab() {
   const { deck } = useOutletContext<DeckOutletContext>();
@@ -198,6 +160,10 @@ type HistoryEntry = {
   userAnswer: string | null;
   isCorrect: boolean;
   timedOut: boolean;
+  // Carried alongside the question itself since, unlike question.*, this
+  // only exists after the server graded it.
+  correctAnswer: string;
+  explanation?: string;
 };
 
 // `!` to win the cascade over badgeClass's own border/text color, same
@@ -255,6 +221,11 @@ function QuizRunner({
   // after answering always matches what was graded/scored — never a second,
   // separately-recomputed check that could disagree with it.
   const [lastCorrect, setLastCorrect] = useState(false);
+  // The correct answer only exists on the client after the server reveals
+  // it here — there's no local copy to fall back on anymore (see reveal()).
+  const [revealed, setRevealed] = useState<Revealed | null>(null);
+  const [gradeError, setGradeError] = useState<string | null>(null);
+  const [lastAttempt, setLastAttempt] = useState<{ given: string | null; isTimeout: boolean } | null>(null);
 
   const question = questions[index];
   const isDone = index >= questions.length;
@@ -268,6 +239,9 @@ function QuizRunner({
     setTimedOut(false);
     setTimeLeft(QUESTION_SECONDS);
     setAwardedItem(null);
+    setRevealed(null);
+    setGradeError(null);
+    setLastAttempt(null);
 
     const tick = setInterval(() => {
       setTimeLeft((t) => (t > 0 ? t - 1 : 0));
@@ -295,35 +269,48 @@ function QuizRunner({
     );
   }
 
-  // Grading happens on the server — it's also what decides furniture drops,
-  // so trusting a client-side-only check would let anyone farm rewards for
-  // free. Falls back to a local check only if the request itself fails, so
-  // the quiz still works (just without a reward roll) on a network hiccup.
+  // Grading happens entirely on the server — it's also what decides
+  // furniture drops, and it's now the *only* place the correct answer
+  // exists at all (the quiz load never sends it, see types.ts). So there's
+  // no local check to fall back on anymore: if the request itself fails,
+  // this reports that and lets the player retry instead of silently
+  // guessing right or wrong.
   async function reveal(given: string | null, isTimeout: boolean) {
     setIsGrading(true);
-    let correct = checkAnswer(question, given);
-    let awarded: AwardedItem | null = null;
+    setGradeError(null);
+    setLastAttempt({ given, isTimeout });
 
     try {
       const result = await apiFetch(`/api/decks/${deckId}/study/answer`, {
         method: "POST",
         body: JSON.stringify({ question_id: question.id, answer: given }),
       });
-      correct = Boolean(result?.correct);
-      awarded = result?.awarded ?? null;
-    } catch {
-      // Swallow it — the local `correct` fallback above already covers this.
-    }
+      const correct = Boolean(result?.correct);
+      const correctAnswer = typeof result?.correct_answer === "string" ? result.correct_answer : "";
+      const explanation = typeof result?.explanation === "string" ? result.explanation : undefined;
+      const awarded: AwardedItem | null = result?.awarded ?? null;
 
-    setUserAnswer(given);
-    setTimedOut(isTimeout);
-    setPhase("revealed");
-    setIsGrading(false);
-    setLastCorrect(correct);
-    if (correct) setScore((s) => s + 1);
-    if (awarded) setAwardedItem(awarded);
-    setHistory((h) => [...h, { question, userAnswer: given, isCorrect: correct, timedOut: isTimeout }]);
+      setUserAnswer(given);
+      setTimedOut(isTimeout);
+      setRevealed({ answer: correctAnswer, explanation });
+      setPhase("revealed");
+      setLastCorrect(correct);
+      if (correct) setScore((s) => s + 1);
+      if (awarded) setAwardedItem(awarded);
+      setHistory((h) => [
+        ...h,
+        { question, userAnswer: given, isCorrect: correct, timedOut: isTimeout, correctAnswer, explanation },
+      ]);
+    } catch {
+      setGradeError("Couldn't grade that — check your connection and try again.");
+    } finally {
+      setIsGrading(false);
+    }
   }
+
+  const retryGrading = () => {
+    if (lastAttempt) reveal(lastAttempt.given, lastAttempt.isTimeout);
+  };
 
   const choose = (option: string) => {
     if (phase !== "answering" || isGrading) return;
@@ -376,11 +363,11 @@ function QuizRunner({
                   </p>
                 )}
                 <p className="m-0 mb-1 text-[12px] text-ink-dim">
-                  Correct answer: <span className="font-medium text-ink">{entry.question.answer}</span>
+                  Correct answer: <span className="font-medium text-ink">{entry.correctAnswer}</span>
                 </p>
-                {entry.question.explanation && (
+                {entry.explanation && (
                   <p className="m-0 text-[11.5px] leading-relaxed text-ink-faint">
-                    {entry.question.explanation}
+                    {entry.explanation}
                   </p>
                 )}
               </article>
@@ -440,7 +427,7 @@ function QuizRunner({
     if (!hasAnswered) {
       return base + "border-line bg-panel text-ink-dim hover:bg-panel-hover hover:text-ink";
     }
-    if (option === question.answer) return base + "border-green bg-green/10 text-green";
+    if (option === revealed?.answer) return base + "border-green bg-green/10 text-green";
     if (option === userAnswer) return base + "border-danger bg-danger/10 text-danger";
     return base + "border-hairline bg-panel text-ink-faint";
   };
@@ -476,6 +463,20 @@ function QuizRunner({
 
       <h2 className="m-0 mb-4 text-[15px] font-medium leading-snug text-ink">{question.question}</h2>
 
+      {gradeError && (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-lg border border-danger/30 bg-danger/10 px-3 py-2.5 text-[12.5px] text-danger">
+          <span>{gradeError}</span>
+          <button
+            type="button"
+            onClick={retryGrading}
+            disabled={isGrading}
+            className="flex-shrink-0 font-medium underline decoration-danger/40 underline-offset-2 hover:decoration-danger"
+          >
+            {isGrading ? "Retrying..." : "Try again"}
+          </button>
+        </div>
+      )}
+
       {question.type === "multiple_choice" && question.options ? (
         <div className="mb-4 flex flex-col gap-2">
           {question.options.map((option) => (
@@ -486,10 +487,10 @@ function QuizRunner({
               disabled={hasAnswered || isGrading}
             >
               <span>{option}</span>
-              {hasAnswered && option === question.answer && (
+              {hasAnswered && option === revealed?.answer && (
                 <CheckIcon size={14} className="flex-shrink-0" />
               )}
-              {hasAnswered && option === userAnswer && option !== question.answer && (
+              {hasAnswered && option === userAnswer && option !== revealed?.answer && (
                 <XIcon size={14} className="flex-shrink-0" />
               )}
             </button>
@@ -509,7 +510,7 @@ function QuizRunner({
           />
           {!hasAnswered && (
             <button className={primaryButton} type="submit" disabled={isGrading || !typedValue.trim()}>
-              Submit answer
+              {isGrading ? "Grading..." : "Submit answer"}
             </button>
           )}
           {hasAnswered && (
@@ -523,15 +524,15 @@ function QuizRunner({
               <span>
                 {lastCorrect
                   ? "Correct"
-                  : `${timedOut ? "Time's up — " : ""}Correct answer: ${question.answer}`}
+                  : `${timedOut ? "Time's up — " : ""}Correct answer: ${revealed?.answer}`}
               </span>
             </div>
           )}
         </form>
       )}
 
-      {hasAnswered && question.explanation && (
-        <p className="m-0 mb-4 text-[12px] leading-relaxed text-ink-faint">{question.explanation}</p>
+      {hasAnswered && revealed?.explanation && (
+        <p className="m-0 mb-4 text-[12px] leading-relaxed text-ink-faint">{revealed.explanation}</p>
       )}
 
       {hasAnswered && awardedItem && (

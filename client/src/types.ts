@@ -38,12 +38,14 @@ export type NoteInput = Pick<Note, "title" | "content">;
 export type QuestionType = "multiple_choice" | "identification" | "fill_in_blank";
 export type QuestionDifficulty = "easy" | "medium" | "hard";
 
+// No `answer` field — the server deliberately withholds it until the
+// question is actually graded (see server/routes/quizzes.py), so it isn't
+// sitting in a network response before the player has answered.
 export interface QuizQuestion {
   id: number;
   type: QuestionType;
   question: string;
   options: string[] | null;
-  answer: string;
   explanation?: string;
   difficulty?: QuestionDifficulty;
 }

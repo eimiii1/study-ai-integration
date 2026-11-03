@@ -12,16 +12,24 @@ from utils.text_match import is_close_enough
 quizzes_bp = Blueprint('quizzes', __name__, url_prefix='/api/decks')
 
 
-def _serialize_question(q):
-    return {
+# include_answer is False for the quiz the player studies from (GET /study) —
+# sending correct_answer/explanation up front would let anyone read the key
+# out of the network tab before answering a single question, which is exactly
+# what server-side grading in answer_question() below is meant to prevent.
+# It's only True for the one place that's supposed to reveal the answer: the
+# grading response itself, after the player has already submitted theirs.
+def _serialize_question(q, include_answer=False):
+    data = {
         'id': q.id,
         'question_type': q.question_type,
         'question_text': q.question_text,
         'choices': q.choices,
-        'correct_answer': q.correct_answer,
         'difficulty': q.difficulty,
-        'explanation': q.explanation,
     }
+    if include_answer:
+        data['correct_answer'] = q.correct_answer
+        data['explanation'] = q.explanation
+    return data
 
 
 def _serialize_quiz(quiz):

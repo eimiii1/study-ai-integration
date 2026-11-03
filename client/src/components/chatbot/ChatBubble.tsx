@@ -4,7 +4,7 @@ import { ArrowRightIcon, ChatbotIcon, DecksIcon, NoteIcon, XIcon } from "../icon
 
 function BotAvatar() {
   return (
-    <span className="flex h-6.5 w-6.5 flex-shrink-0 items-center justify-center rounded-[6px] border-[1.5px] border-ink bg-violet text-[#fbf8ee]">
+    <span className="flex h-6.5 w-6.5 flex-shrink-0 items-center justify-center rounded-[8px] bg-ink text-app">
       <ChatbotIcon size={13} />
     </span>
   );
@@ -22,10 +22,10 @@ export function ChatBubble({
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[80%] rounded-[10px] border-[1.5px] border-ink bg-panel px-3 py-2 text-[12.5px] text-ink shadow-[var(--shadow-sticker-sm)]">
+        <div className="max-w-[80%] rounded-[14px] bg-ink px-3 py-2 text-[12.5px] text-app shadow-[var(--shadow-soft)]">
           {message.kind === "file" ? (
             <span className="flex items-center gap-1.5">
-              <NoteIcon size={13} className="flex-shrink-0 text-ink-muted" />
+              <NoteIcon size={13} className="flex-shrink-0 text-app/70" />
               <span className="truncate">{message.fileName}</span>
             </span>
           ) : (
@@ -62,7 +62,7 @@ export function ChatBubble({
 
         {message.kind === "deck" && (
           <div className="flex animate-fade-in-up items-center gap-3 rounded-[10px] border border-line bg-panel px-3.5 py-3 shadow-[var(--shadow-soft)]">
-            <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[6px] border-[1.5px] border-ink bg-orange/20 text-orange">
+            <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[8px] bg-orange/15 text-orange">
               <DecksIcon size={15} />
             </span>
             <div className="min-w-0 flex-1">

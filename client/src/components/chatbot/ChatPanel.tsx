@@ -210,9 +210,9 @@ export function ChatPanel() {
     // and stats below it stay visible and scrollable.
     return (
       <div {...dropProps}>
-        <div className="mx-auto max-w-150 rounded-[10px] border-[1.5px] border-ink bg-panel p-4 shadow-[var(--shadow-sticker)]">
+        <div className="mx-auto max-w-150 rounded-[16px] border border-line bg-panel p-4 shadow-[var(--shadow-soft)]">
           <div className="mb-3 flex items-center gap-2">
-            <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[6px] border-[1.5px] border-ink bg-violet text-[#fbf8ee]">
+            <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[8px] bg-ink text-app">
               <ChatbotIcon size={14} />
             </span>
             <p className="m-0 text-[12.5px] leading-relaxed text-ink-dim">{INTRO_TEXT}</p>
@@ -228,7 +228,7 @@ export function ChatPanel() {
       {/* left-52 keeps the sidebar (w-52) visible — this covers the rest of the
           screen, not the whole browser viewport. */}
       <div className="fixed inset-y-0 left-52 right-0 z-30 flex flex-col bg-app">
-        <div className="flex h-[46px] flex-shrink-0 items-center justify-between border-b-[1.5px] border-ink px-6">
+        <div className="flex h-[46px] flex-shrink-0 items-center justify-between border-b border-hairline px-6">
           <div className="flex items-center gap-1.5 text-[13px] font-medium text-ink">
             <ChatbotIcon size={14} />
             <span>Chatbot</span>
@@ -253,7 +253,7 @@ export function ChatPanel() {
           </div>
         </div>
 
-        <div className="flex-shrink-0 border-t-[1.5px] border-line bg-app px-6 py-3">{composer}</div>
+        <div className="flex-shrink-0 border-t border-hairline bg-app px-6 py-3">{composer}</div>
       </div>
     </div>
   );

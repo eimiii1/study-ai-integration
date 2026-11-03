@@ -66,15 +66,16 @@ export function RegisterPage() {
     <AuthLayout
       headline="Turn your notes into decks you can actually quiz on."
       eyebrow="Create an account to start building flashcard decks and AI-generated quizzes."
+      preview={{ front: "Litotes", back: "An understatement that affirms by negating its opposite" }}
     >
-      <h1 className="font-display m-0 mb-1.5 text-[23px] font-medium text-ink">Create your account</h1>
-      <p className="m-0 mb-7 text-[13px] text-ink-muted">Get started with BuildScape for free.</p>
+      <h1 className="font-display m-0 mb-1.5 text-[26px] font-medium text-ink">Create your account</h1>
+      <p className="m-0 mb-8 text-[13.5px] text-ink-muted">Get started with BuildScape for free.</p>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-5 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-ink-dim">Username</span>
-            <span className="flex h-9.5 items-center gap-2 rounded-[6px] border-[1.5px] border-line-strong bg-input px-2.75 focus-within:border-ink focus-within:shadow-[2px_2px_0_0_var(--color-violet)] focus-within:shadow-[0_0_0_3px_rgba(182,81,47,0.18)]">
+            <span className="flex h-11 items-center gap-2 rounded-[10px] border border-line bg-input px-3 transition-colors focus-within:border-ink focus-within:bg-panel focus-within:shadow-[var(--shadow-ring)]">
               <UserIcon size={15} className="text-ink-faint" />
               <input
                 type="text"
@@ -91,7 +92,7 @@ export function RegisterPage() {
 
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-ink-dim">Email</span>
-            <span className="flex h-9.5 items-center gap-2 rounded-[6px] border-[1.5px] border-line-strong bg-input px-2.75 focus-within:border-ink focus-within:shadow-[2px_2px_0_0_var(--color-violet)] focus-within:shadow-[0_0_0_3px_rgba(182,81,47,0.18)]">
+            <span className="flex h-11 items-center gap-2 rounded-[10px] border border-line bg-input px-3 transition-colors focus-within:border-ink focus-within:bg-panel focus-within:shadow-[var(--shadow-ring)]">
               <MailIcon size={15} className="text-ink-faint" />
               <input
                 type="email"
@@ -107,7 +108,7 @@ export function RegisterPage() {
 
           <label className="flex flex-col gap-1.5">
             <span className="text-[12.5px] font-medium text-ink-dim">Password</span>
-            <span className="flex h-9.5 items-center gap-2 rounded-[6px] border-[1.5px] border-line-strong bg-input px-2.75 focus-within:border-ink focus-within:shadow-[2px_2px_0_0_var(--color-violet)] focus-within:shadow-[0_0_0_3px_rgba(182,81,47,0.18)]">
+            <span className="flex h-11 items-center gap-2 rounded-[10px] border border-line bg-input px-3 transition-colors focus-within:border-ink focus-within:bg-panel focus-within:shadow-[var(--shadow-ring)]">
               <LockIcon size={15} className="text-ink-faint" />
               <input
                 type={showPassword ? "text" : "password"}
@@ -131,14 +132,14 @@ export function RegisterPage() {
           </label>
         </div>
 
-        <div className="mb-5 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between">
           <label className="flex items-center gap-1.75 text-[12.5px] text-ink-dim">
             <input
               type="checkbox"
               checked={agreeToTerms}
               onChange={(e) => setAgreeToTerms(e.target.checked)}
               required
-              className="h-3.5 w-3.5 accent-violet"
+              className="h-3.5 w-3.5 accent-ink"
             />
             <span>I agree to the Terms and Privacy Policy</span>
           </label>
@@ -149,7 +150,7 @@ export function RegisterPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mb-5 flex h-10 w-full items-center justify-center gap-1.5 rounded-[6px] border-[1.5px] border-ink bg-violet text-[13.5px] font-semibold text-[#fbf8ee] shadow-[var(--shadow-sticker-sm)] hover:bg-violet-strong active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-60"
+          className="mb-6 flex h-11 w-full items-center justify-center gap-1.5 rounded-[10px] bg-ink text-[13.5px] font-semibold text-app shadow-[var(--shadow-soft)] hover:bg-ink-dim active:opacity-85 disabled:opacity-60"
         >
           {isSubmitting && (
             <span className="h-3.5 w-3.5 animate-spin rounded-full border-[1.5px] border-app/40 border-t-app" />
@@ -159,16 +160,16 @@ export function RegisterPage() {
         </button>
       </form>
 
-      <div className="mb-5 flex items-center gap-2.5 before:h-px before:flex-1 before:bg-hairline after:h-px after:flex-1 after:bg-hairline">
+      <div className="mb-6 flex items-center gap-2.5 before:h-px before:flex-1 before:bg-hairline after:h-px after:flex-1 after:bg-hairline">
         <span className="text-[11.5px] text-ink-faint">or continue with</span>
       </div>
 
-      <div className="mb-7 flex gap-2.5">
+      <div className="mb-8 flex gap-2.5">
         <button
           type="button"
           disabled
           title="Not available yet"
-          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-[6px] border-[1.5px] border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
+          className="flex h-10.5 flex-1 cursor-not-allowed items-center justify-center rounded-[10px] border border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
         >
           Google
         </button>
@@ -176,7 +177,7 @@ export function RegisterPage() {
           type="button"
           disabled
           title="Not available yet"
-          className="flex h-9.5 flex-1 cursor-not-allowed items-center justify-center rounded-[6px] border-[1.5px] border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
+          className="flex h-10.5 flex-1 cursor-not-allowed items-center justify-center rounded-[10px] border border-line-strong bg-panel text-[12.5px] text-ink-faint opacity-60"
         >
           Microsoft
         </button>

@@ -197,10 +197,10 @@ export function RoomPage() {
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-app">
-      <div className="flex flex-shrink-0 items-center justify-between border-b-[1.5px] border-ink bg-panel px-5 py-2.75">
+      <div className="flex flex-shrink-0 items-center justify-between border-b border-hairline bg-panel px-5 py-2.75">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-1.5 rounded-[6px] border-[1.5px] border-line-strong px-2.75 py-1.25 text-[12px] font-medium text-ink-dim hover:border-ink hover:text-ink"
+          className="flex items-center gap-1.5 rounded-[8px] border border-line-strong px-2.75 py-1.25 text-[12px] font-medium text-ink-dim hover:border-ink hover:text-ink"
         >
           <span className="text-[14px] leading-none">‹</span>
           <span>Exit</span>
@@ -208,11 +208,11 @@ export function RoomPage() {
 
         <div className="flex items-center gap-2.5">
           <span className="h-1.5 w-1.5 rotate-45 bg-violet" />
-          <h1 className="font-display m-0 text-[18px] font-medium italic tracking-tight text-ink">My Room</h1>
+          <h1 className="font-display m-0 text-[18px] font-medium tracking-tight text-ink">My Room</h1>
           <span className="h-1.5 w-1.5 rotate-45 bg-violet" />
         </div>
 
-        <div className="flex items-center gap-1.5 rounded-[6px] border-[1.5px] border-ink bg-violet/12 px-2.75 py-1 text-[12px] font-semibold text-violet">
+        <div className="flex items-center gap-1.5 rounded-[8px] bg-violet/12 px-2.75 py-1 text-[12px] font-semibold text-violet">
           <SparklesIcon size={12} />
           <span>{itemsEarned} collected</span>
         </div>
@@ -226,7 +226,7 @@ export function RoomPage() {
 
       <div className="relative flex min-h-0 flex-1 gap-3 overflow-hidden p-3">
         {placingItem && (
-          <div className="animate-fade-in-up absolute left-1/2 top-6 z-20 flex -translate-x-1/2 items-center gap-2.5 rounded-[6px] border-[1.5px] border-ink bg-panel px-4 py-2 text-[12px] text-ink shadow-[var(--shadow-sticker)]">
+          <div className="animate-fade-in-up absolute left-1/2 top-6 z-20 flex -translate-x-1/2 items-center gap-2.5 rounded-[10px] border border-line bg-panel px-4 py-2 text-[12px] text-ink shadow-[var(--shadow-lift)]">
             <span className="animate-hud-pulse h-1.5 w-1.5 rounded-full bg-violet" />
             <span>
               Tap a glowing {placingItem.placement_zone === "wall" ? "wall slot" : "floor tile"} to place{" "}
@@ -238,7 +238,7 @@ export function RoomPage() {
           </div>
         )}
         {placeError && !placingItem && (
-          <div className="animate-fade-in-up absolute left-1/2 top-6 z-20 -translate-x-1/2 rounded-[6px] border-[1.5px] border-ink bg-panel px-4 py-2 text-[12px] font-medium text-danger shadow-[var(--shadow-sticker)]">
+          <div className="animate-fade-in-up absolute left-1/2 top-6 z-20 -translate-x-1/2 rounded-[10px] border border-line bg-panel px-4 py-2 text-[12px] font-medium text-danger shadow-[var(--shadow-lift)]">
             {placeError}
           </div>
         )}
@@ -249,7 +249,7 @@ export function RoomPage() {
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
           onClick={handleCanvasClick}
-          className="relative flex-1 overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-[#14110c] shadow-[var(--shadow-sticker)]"
+          className="relative flex-1 overflow-hidden rounded-[14px] border border-rail-line bg-[#14110c] shadow-[var(--shadow-lift)]"
           style={{
             // The room art itself: plain CSS contain-fit, nothing can break this.
             backgroundImage: "url(/game/room-bg.png)",
@@ -322,7 +322,7 @@ export function RoomPage() {
                       height={ITEM_BOX + 16}
                       rx={6}
                       fill="none"
-                      stroke="#b6512f"
+                      stroke="var(--color-violet)"
                       strokeDasharray="7 5"
                       strokeWidth={3 / scale}
                     />
@@ -362,10 +362,10 @@ export function RoomPage() {
           )}
         </div>
 
-        <aside className="flex w-64 flex-shrink-0 flex-col overflow-y-auto rounded-[10px] border-[1.5px] border-ink bg-panel p-3 shadow-[var(--shadow-sticker)]">
-          <div className="mb-2.5 flex items-center gap-1.5 border-b-[1.5px] border-dashed border-line-strong pb-2.5">
+        <aside className="flex w-64 flex-shrink-0 flex-col overflow-y-auto rounded-[14px] border border-line bg-panel p-3 shadow-[var(--shadow-soft)]">
+          <div className="mb-2.5 flex items-center gap-1.5 border-b border-dashed border-line-strong pb-2.5">
             <span className="h-1.5 w-1.5 rotate-45 bg-violet" />
-            <h2 className="font-display m-0 text-[14px] font-medium italic text-ink">Collection</h2>
+            <h2 className="font-display m-0 text-[14px] font-medium text-ink">Collection</h2>
             <span className="ml-auto text-[11px] text-ink-faint">{inventory.length} kinds</span>
           </div>
           {inventory.length === 0 ? (
@@ -384,9 +384,9 @@ export function RoomPage() {
                     onClick={() => startPlacing(item)}
                     disabled={isExhausted}
                     className={
-                      "group relative flex flex-col items-center gap-1 rounded-[8px] border-[1.5px] bg-elevated p-2 text-center transition-all disabled:cursor-not-allowed disabled:opacity-35 " +
+                      "group relative flex flex-col items-center gap-1 rounded-[10px] border bg-elevated p-2 text-center transition-all disabled:cursor-not-allowed disabled:opacity-35 " +
                       (isPlacing
-                        ? "border-violet shadow-[0_0_0_1px_rgba(182,81,47,0.5),0_0_16px_-2px_rgba(182,81,47,0.5)]"
+                        ? "border-violet shadow-[0_0_0_1px_rgba(103,92,158,0.5),0_0_16px_-2px_rgba(103,92,158,0.5)]"
                         : `${rarity.border} hover:-translate-y-0.5 ${rarity.glow}`)
                     }
                     title={isExhausted ? "All of this one are already placed" : `Place ${item.name}`}
@@ -394,7 +394,7 @@ export function RoomPage() {
                     <span className="pointer-events-none absolute left-1.5 top-1.5 h-1.5 w-1.5 rounded-full" style={{ background: `rgba(${rarity.rgb},1)` }} />
                     <img src={item.image_url} alt={item.name} className="h-12 w-12 object-contain drop-shadow-[0_4px_6px_rgba(0,0,0,0.25)]" />
                     <span className="w-full truncate text-[10.5px] text-ink-dim">{item.name}</span>
-                    <span className="rounded-[5px] border border-line-strong bg-panel px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-ink-faint">
+                    <span className="rounded-[6px] border border-line-strong bg-panel px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-ink-faint">
                       {item.available}/{item.quantity}
                     </span>
                   </button>
@@ -424,9 +424,9 @@ function GridOverlay({
   target: GridTarget | null;
 }) {
   const cellFill = (empty: boolean, active: boolean) =>
-    active ? "rgba(182,81,47,.4)" : empty ? "rgba(62,107,92,.18)" : "rgba(169,58,44,.16)";
+    active ? "rgba(103,92,158,.4)" : empty ? "rgba(63,110,98,.18)" : "rgba(174,60,44,.16)";
   const cellStroke = (empty: boolean, active: boolean) =>
-    active ? "#b6512f" : empty ? "rgba(62,107,92,.75)" : "rgba(169,58,44,.65)";
+    active ? "var(--color-violet)" : empty ? "rgba(63,110,98,.75)" : "rgba(174,60,44,.65)";
 
   if (activeZone === "floor") {
     const cells = [];
@@ -494,7 +494,7 @@ function SelectedItemToolbar({
 }) {
   return (
     <div
-      className="absolute z-[10000] flex items-center gap-1 rounded-full border-[1.5px] border-ink bg-panel px-1.5 py-1 shadow-[var(--shadow-sticker-sm)]"
+      className="absolute z-[10000] flex items-center gap-1 rounded-full border border-line bg-panel px-1.5 py-1 shadow-[var(--shadow-lift)]"
       style={{ left: anchor.x, top: anchor.y + 44, transform: "translate(-50%, 0)" }}
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
@@ -544,7 +544,7 @@ function ViewportCorners() {
       fill="none"
       style={{ transform: `rotate(${rotate}deg)` }}
     >
-      <path d="M2 14V4a2 2 0 0 1 2-2h10" stroke="#b6512f" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+      <path d="M2 14V4a2 2 0 0 1 2-2h10" stroke="var(--color-violet)" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
     </svg>
   );
   return (

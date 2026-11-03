@@ -11,15 +11,15 @@ export function DeckTile({ deck }: { deck: Deck }) {
   return (
     <Link
       to={`/decks/${deck.id}`}
-      className="group relative block rounded-[8px] border-[1.5px] border-ink bg-panel p-3.5 pt-5 no-underline shadow-[var(--shadow-sticker)] transition-transform hover:-translate-y-[2px] hover:shadow-[5px_5px_0_0_var(--color-ink)]"
+      className="group relative block rounded-[14px] border border-line bg-panel p-3.5 pt-4.5 no-underline shadow-[var(--shadow-soft)] transition-[transform,box-shadow] hover:-translate-y-[2px] hover:shadow-[var(--shadow-lift)]"
     >
       <span
-        className="absolute -top-[1.5px] left-4 flex h-3.5 w-7 items-center justify-center rounded-b-[4px] border-[1.5px] border-t-0 border-ink"
+        className="absolute left-4 top-0 h-[2.5px] w-7 -translate-y-px rounded-full"
         style={{ background: `var(--color-${accent})` }}
       />
       <div className="mb-2.25 flex items-center gap-2">
         <span
-          className="flex h-5.5 w-5.5 flex-shrink-0 items-center justify-center rounded-[5px] border-[1.5px] border-ink text-[#fbf8ee]"
+          className="flex h-5.5 w-5.5 flex-shrink-0 items-center justify-center rounded-[6px] text-white"
           style={{ background: `var(--color-${accent})` }}
         >
           <DecksIcon size={12} />
